@@ -1,8 +1,6 @@
 package ru.nobird.app.kmm_test
 
-import ru.nobird.android.core.model.PaginationDirection
-import ru.nobird.android.core.model.distinct
-
+import ru.nobird.app.core.model.PaginationDirection
 
 class Greeting {
     fun greeting(): String {

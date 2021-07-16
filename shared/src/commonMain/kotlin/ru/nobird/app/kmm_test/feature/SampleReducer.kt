@@ -1,9 +1,9 @@
 package ru.nobird.app.kmm_test.feature
 
-import ru.nobird.android.presentation.redux.reducer.StateReducer
 import ru.nobird.app.kmm_test.feature.SampleFeature.State
 import ru.nobird.app.kmm_test.feature.SampleFeature.Message
 import ru.nobird.app.kmm_test.feature.SampleFeature.Action
+import ru.nobird.app.presentation.redux.reducer.StateReducer
 
 class SampleReducer : StateReducer<State, Message, Action> {
     override fun reduce(

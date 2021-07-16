@@ -30,8 +30,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("ru.nobird.android.core:Model:1.0.7")
-                api("ru.nobird.android.presentation:presentation-redux:1.1.1")
+                implementation("ru.nobird.app.core:model:1.0.7")
+                api("ru.nobird.app.presentation:presentation-redux:1.2.0")
                 implementation("ru.nobird.android.presentation:presentation-redux-coroutines:1.2.1")
             }
         }
