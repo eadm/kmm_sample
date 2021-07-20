@@ -3,11 +3,12 @@ package ru.nobird.app.kmm_test.android
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import ru.nobird.app.kmm_test.android.databinding.ActivityMainBinding
-import ru.nobird.app.kmm_test.feature.SampleFeature
-import ru.nobird.app.kmm_test.feature.SampleFeatureBuilder
+import ru.nobird.app.kmm_test.user_list.UsersListFeature
+import ru.nobird.app.kmm_test.user_list.UsersListFeatureBuilder
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityMainBinding
+    private val usersAdapter = UsersAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,18 +16,20 @@ class MainActivity : AppCompatActivity() {
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
-        val sampleFeature = SampleFeatureBuilder.build()
+        val usersListFeature = UsersListFeatureBuilder.build()
 
-        sampleFeature.addStateListener(this::setState)
+        usersListFeature.addStateListener(this::setState)
 
         viewBinding.button.setOnClickListener {
-            sampleFeature.onNewMessage(SampleFeature.Message.IncCounterClicked)
+            usersListFeature.onNewMessage(UsersListFeature.Message.Init())
         }
 
-        setState(sampleFeature.state)
+        setState(usersListFeature.state)
+        viewBinding.usersList.adapter = usersAdapter
     }
 
-    private fun setState(state: SampleFeature.State) {
-        viewBinding.textView.text = (state as? SampleFeature.State.Data)?.counter.toString()
+    private fun setState(state: UsersListFeature.State) {
+        // TODO: 7/21/21 change to paged list
+        usersAdapter.updateList((state as? UsersListFeature.State.Data)?.users)
     }
 }

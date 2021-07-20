@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
+    kotlin("plugin.serialization") version "1.5.0"
     id("com.android.library")
 }
 
@@ -31,6 +32,11 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation("ru.nobird.app.core:model:1.0.7")
+
+                //network
+                implementation("io.ktor:ktor-client-core:1.6.1")
+                implementation("io.ktor:ktor-client-serialization:1.6.1")
+
                 api("ru.nobird.app.presentation:presentation-redux:1.2.0")
                 implementation("ru.nobird.android.presentation:presentation-redux-coroutines:1.2.1")
             }
@@ -41,14 +47,22 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
             }
         }
-        val androidMain by getting
+        val androidMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-okhttp:1.6.1")
+            }
+        }
         val androidTest by getting {
             dependencies {
                 implementation(kotlin("test-junit"))
                 implementation("junit:junit:4.13.2")
             }
         }
-        val iosMain by getting
+        val iosMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-ios:1.6.1")
+            }
+        }
         val iosTest by getting
     }
 }
