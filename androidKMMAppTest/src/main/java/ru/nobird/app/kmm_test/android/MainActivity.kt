@@ -3,6 +3,7 @@ package ru.nobird.app.kmm_test.android
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import ru.nobird.app.kmm_test.android.databinding.ActivityMainBinding
+import ru.nobird.app.kmm_test.data.model.UsersQuery
 import ru.nobird.app.kmm_test.user_list.UsersListFeature
 import ru.nobird.app.kmm_test.user_list.UsersListFeatureBuilder
 
@@ -21,7 +22,14 @@ class MainActivity : AppCompatActivity() {
         usersListFeature.addStateListener(this::setState)
 
         viewBinding.button.setOnClickListener {
-            usersListFeature.onNewMessage(UsersListFeature.Message.Init())
+            usersListFeature.onNewMessage(
+                UsersListFeature.Message.Init(
+                    forceUpdate = true,
+                    usersQuery = UsersQuery(
+                        userName = viewBinding.userName.text.toString()
+                    )
+                )
+            )
         }
 
         setState(usersListFeature.state)

@@ -26,7 +26,7 @@ class UsersListDispatcher(
                     }
                 }
                 try {
-                    val response: UsersResponse = httpClient.get("https://api.github.com/search/users?q=eadm&page=1&per_page=20")
+                    val response: UsersResponse = httpClient.get("https://api.github.com/search/users?q=${action.usersQuery.userName}&page=1&per_page=20")
                     onNewMessage(Message.UsersLoaded.Success(response.items))
                 } catch (e: Exception) {
                     onNewMessage(
