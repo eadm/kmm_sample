@@ -5,7 +5,7 @@ import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import kotlinx.serialization.json.Json
-import ru.nobird.android.presentation.redux.dispatcher.CoroutineActionDispatcher
+import ru.nobird.app.presentation.redux.dispatcher.CoroutineActionDispatcher
 import ru.nobird.app.kmm_test.base.ActionDispatcherOptions
 import ru.nobird.app.kmm_test.data.model.UsersResponse
 import ru.nobird.app.kmm_test.user_list.UsersListFeature.Action

@@ -3,7 +3,7 @@ package ru.nobird.app.kmm_test.base
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
-import ru.nobird.android.presentation.redux.dispatcher.CoroutineActionDispatcher
+import ru.nobird.app.presentation.redux.dispatcher.CoroutineActionDispatcher
 
 /**
  * Null scope means ActionDispatcher can decide for itself

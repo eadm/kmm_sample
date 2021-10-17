@@ -38,7 +38,7 @@ kotlin {
                 implementation("io.ktor:ktor-client-serialization:1.6.1")
 
                 api("ru.nobird.app.presentation:presentation-redux:1.2.0")
-                implementation("ru.nobird.android.presentation:presentation-redux-coroutines:1.2.1")
+                implementation("ru.nobird.app.presentation:presentation-redux-coroutines:1.2.1")
             }
         }
         val commonTest by getting {
