@@ -36,6 +36,9 @@ class UsersListDispatcher(
                     )
                 }
             }
+            is Action.ViewAction -> {
+                // no op
+            }
         }
     }
 }

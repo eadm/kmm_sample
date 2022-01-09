@@ -13,6 +13,7 @@ dependencies {
     implementation(libs.kotlin.coroutines.android)
 
     implementation(libs.bundles.ktor.common)
+    implementation(libs.bundles.android.compose)
 
     testImplementation(libs.bundles.android.test)
 }
@@ -36,5 +37,14 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
+    }
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.1.0-rc01"
     }
 }

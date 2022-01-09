@@ -1,6 +1,5 @@
 package ru.nobird.app.kmm_test.user_list
 
-import ru.nobird.app.core.model.PagedList
 import ru.nobird.app.kmm_test.data.model.User
 import ru.nobird.app.kmm_test.data.model.UsersQuery
 
