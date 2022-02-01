@@ -21,8 +21,8 @@
 
 /* Begin PBXBuildFile section */
 		4ABBA2524E844B0919D82EE12DDFDB8E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		65F549FBA393165A2982418364A77CD0 /* Pods-iosKMMAppTest-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 64DE703A075EF43FB2622B471C3D9BF1 /* Pods-iosKMMAppTest-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		66092E57BCF8C2545187D5BF0267A2CE /* Pods-iosKMMAppTest-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 596132CF27966B1796C798412F1B7E0A /* Pods-iosKMMAppTest-dummy.m */; };
+		65F549FBA393165A2982418364A77CD0 /* Pods-iosKMMAppTest-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = DA117A7B6E582DBE53C83D0FEC0E212E /* Pods-iosKMMAppTest-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66092E57BCF8C2545187D5BF0267A2CE /* Pods-iosKMMAppTest-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A065B6F27DD061AE843F55B057271B /* Pods-iosKMMAppTest-dummy.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,21 +36,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		46A3C4633974A5DDD1F37D4C51ABFDC2 /* Pods-iosKMMAppTest-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-iosKMMAppTest-acknowledgements.markdown"; sourceTree = "<group>"; };
-		596132CF27966B1796C798412F1B7E0A /* Pods-iosKMMAppTest-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-iosKMMAppTest-dummy.m"; sourceTree = "<group>"; };
-		5CB3DDD960E7A4F1A72826EC0AAAE09E /* Pods-iosKMMAppTest-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-iosKMMAppTest-acknowledgements.plist"; sourceTree = "<group>"; };
-		64DE703A075EF43FB2622B471C3D9BF1 /* Pods-iosKMMAppTest-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-iosKMMAppTest-umbrella.h"; sourceTree = "<group>"; };
+		07C8492EFB95898BC5B7DEFE3848B4D2 /* Pods-iosKMMAppTest-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-iosKMMAppTest-acknowledgements.plist"; sourceTree = "<group>"; };
+		0B65ED4DE6C7F2B27775404B4EDB28E5 /* Pods-iosKMMAppTest-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-iosKMMAppTest-acknowledgements.markdown"; sourceTree = "<group>"; };
+		4C42CE6D7ACFB0AF2190E62286F94762 /* Pods-iosKMMAppTest.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-iosKMMAppTest.modulemap"; sourceTree = "<group>"; };
 		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		74DE05897B2758727F069488629C6A31 /* Pods-iosKMMAppTest */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-iosKMMAppTest"; path = Pods_iosKMMAppTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8FABE2A2EF0EA3ECE5B49FE7DCD41C12 /* Pods-iosKMMAppTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iosKMMAppTest.debug.xcconfig"; sourceTree = "<group>"; };
+		8687C3A8954BDF76398FA7F4104E3602 /* Pods-iosKMMAppTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iosKMMAppTest.release.xcconfig"; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9F908D2588F86925882B98D1ED27B5C5 /* shared.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = shared.framework; path = build/cocoapods/framework/shared.framework; sourceTree = "<group>"; };
-		A946F987F9B63770A3A1996AEF98B51C /* Pods-iosKMMAppTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iosKMMAppTest.release.xcconfig"; sourceTree = "<group>"; };
+		BE08101AF80CCA3F65F3864466DE582C /* Pods-iosKMMAppTest-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-iosKMMAppTest-frameworks.sh"; sourceTree = "<group>"; };
+		C4A065B6F27DD061AE843F55B057271B /* Pods-iosKMMAppTest-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-iosKMMAppTest-dummy.m"; sourceTree = "<group>"; };
+		CF83469B0997468C47F805490139736C /* Pods-iosKMMAppTest-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-iosKMMAppTest-Info.plist"; sourceTree = "<group>"; };
+		D3F8C0BCA0E7B76441DBA2C870FF4019 /* Pods-iosKMMAppTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iosKMMAppTest.debug.xcconfig"; sourceTree = "<group>"; };
 		D966EC771476EC97AEF7D518EB73ADDE /* shared.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = shared.debug.xcconfig; sourceTree = "<group>"; };
+		DA117A7B6E582DBE53C83D0FEC0E212E /* Pods-iosKMMAppTest-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-iosKMMAppTest-umbrella.h"; sourceTree = "<group>"; };
 		DAF2E76C85CFE2AEF60611E1EE7522D1 /* shared.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = shared.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		E35EA72E14FA30EF49CDCE7B5E3D7F5A /* shared.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = shared.release.xcconfig; sourceTree = "<group>"; };
-		ED1879DAD65CC9B82B3CC1A3EB85BB57 /* Pods-iosKMMAppTest-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-iosKMMAppTest-Info.plist"; sourceTree = "<group>"; };
-		F162A00F0AF2AB2C8412B91E9439E382 /* Pods-iosKMMAppTest.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-iosKMMAppTest.modulemap"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,22 +66,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		074F00CB0194959D590E0FC567F64FD4 /* Pods-iosKMMAppTest */ = {
-			isa = PBXGroup;
-			children = (
-				F162A00F0AF2AB2C8412B91E9439E382 /* Pods-iosKMMAppTest.modulemap */,
-				46A3C4633974A5DDD1F37D4C51ABFDC2 /* Pods-iosKMMAppTest-acknowledgements.markdown */,
-				5CB3DDD960E7A4F1A72826EC0AAAE09E /* Pods-iosKMMAppTest-acknowledgements.plist */,
-				596132CF27966B1796C798412F1B7E0A /* Pods-iosKMMAppTest-dummy.m */,
-				ED1879DAD65CC9B82B3CC1A3EB85BB57 /* Pods-iosKMMAppTest-Info.plist */,
-				64DE703A075EF43FB2622B471C3D9BF1 /* Pods-iosKMMAppTest-umbrella.h */,
-				8FABE2A2EF0EA3ECE5B49FE7DCD41C12 /* Pods-iosKMMAppTest.debug.xcconfig */,
-				A946F987F9B63770A3A1996AEF98B51C /* Pods-iosKMMAppTest.release.xcconfig */,
-			);
-			name = "Pods-iosKMMAppTest";
-			path = "Target Support Files/Pods-iosKMMAppTest";
-			sourceTree = "<group>";
-		};
 		2D457BDF7D441C4F25DD4EB7AFF4895C /* shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -126,10 +111,10 @@
 			path = "../iosKMMAppTest/Pods/Target Support Files/shared";
 			sourceTree = "<group>";
 		};
-		8531AB127292C39B2A973469FA28C0D1 /* Targets Support Files */ = {
+		AB8DD27636F207733ABD39FF081397D6 /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				074F00CB0194959D590E0FC567F64FD4 /* Pods-iosKMMAppTest */,
+				C74DBCAAB086B9CEC976AB5970CD9BEE /* Pods-iosKMMAppTest */,
 			);
 			name = "Targets Support Files";
 			sourceTree = "<group>";
@@ -140,6 +125,23 @@
 				9F908D2588F86925882B98D1ED27B5C5 /* shared.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C74DBCAAB086B9CEC976AB5970CD9BEE /* Pods-iosKMMAppTest */ = {
+			isa = PBXGroup;
+			children = (
+				4C42CE6D7ACFB0AF2190E62286F94762 /* Pods-iosKMMAppTest.modulemap */,
+				0B65ED4DE6C7F2B27775404B4EDB28E5 /* Pods-iosKMMAppTest-acknowledgements.markdown */,
+				07C8492EFB95898BC5B7DEFE3848B4D2 /* Pods-iosKMMAppTest-acknowledgements.plist */,
+				C4A065B6F27DD061AE843F55B057271B /* Pods-iosKMMAppTest-dummy.m */,
+				BE08101AF80CCA3F65F3864466DE582C /* Pods-iosKMMAppTest-frameworks.sh */,
+				CF83469B0997468C47F805490139736C /* Pods-iosKMMAppTest-Info.plist */,
+				DA117A7B6E582DBE53C83D0FEC0E212E /* Pods-iosKMMAppTest-umbrella.h */,
+				D3F8C0BCA0E7B76441DBA2C870FF4019 /* Pods-iosKMMAppTest.debug.xcconfig */,
+				8687C3A8954BDF76398FA7F4104E3602 /* Pods-iosKMMAppTest.release.xcconfig */,
+			);
+			name = "Pods-iosKMMAppTest";
+			path = "Target Support Files/Pods-iosKMMAppTest";
 			sourceTree = "<group>";
 		};
 		CEA7745E4AB050C12F838D7FCF8E47A6 /* Pod */ = {
@@ -157,7 +159,7 @@
 				313FE5FE915A4A924C55AAC02A910D61 /* Development Pods */,
 				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
 				3EF927E01D60432D762196D2C4B85020 /* Products */,
-				8531AB127292C39B2A973469FA28C0D1 /* Targets Support Files */,
+				AB8DD27636F207733ABD39FF081397D6 /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
 		};
@@ -294,7 +296,7 @@
 		};
 		293028ED40A759B259EDF79EB35BE6D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8FABE2A2EF0EA3ECE5B49FE7DCD41C12 /* Pods-iosKMMAppTest.debug.xcconfig */;
+			baseConfigurationReference = D3F8C0BCA0E7B76441DBA2C870FF4019 /* Pods-iosKMMAppTest.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -393,7 +395,7 @@
 		};
 		59A4E959769510559B5AA40832D12475 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A946F987F9B63770A3A1996AEF98B51C /* Pods-iosKMMAppTest.release.xcconfig */;
+			baseConfigurationReference = 8687C3A8954BDF76398FA7F4104E3602 /* Pods-iosKMMAppTest.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;

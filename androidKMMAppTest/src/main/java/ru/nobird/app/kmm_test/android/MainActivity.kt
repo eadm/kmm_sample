@@ -93,20 +93,18 @@ private fun MainScreen(usersListFeature: Feature<UsersListFeature.State, UsersLi
     LocalLifecycleOwner.current.lifecycle
         .addCancellable {
             usersListFeature.addStateListener { featureState = it }
-            usersListFeature
         }
 
-//    LocalLifecycleOwner.current.lifecycle
-//        .addCancellable {
-//            usersListFeature.addActionListener { action ->
-//                if (action is UsersListFeature.Action.ViewAction) {
+    LocalLifecycleOwner.current.lifecycle
+        .addCancellable {
+            usersListFeature.addActionListener { action ->
+                if (action is UsersListFeature.Action.ViewAction) {
 //                    when (action) {
 //                        is UsersListFeature.Action.ViewAction.ShowNetworkError
 //                    }
-//                }
-//            }
-//            usersListFeature
-//        }
+                }
+            }
+        }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
