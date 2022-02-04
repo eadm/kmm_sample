@@ -41,8 +41,6 @@ data class User(
     val receivedEventsUrl: String,
     @SerialName("repos_url")
     val reposUrl: String,
-    @SerialName("score")
-    val score: Double,
     @SerialName("site_admin")
     val siteAdmin: Boolean,
     @SerialName("starred_url")

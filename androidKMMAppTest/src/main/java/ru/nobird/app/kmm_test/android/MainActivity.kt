@@ -1,33 +1,30 @@
 package ru.nobird.app.kmm_test.android
 
 import android.os.Bundle
+import android.text.util.Linkify
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.progressSemantics
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
@@ -35,9 +32,19 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import coil.compose.rememberImagePainter
 import ru.nobird.app.core.model.Cancellable
 import ru.nobird.app.kmm_test.android.databinding.ActivityMainBinding
+import ru.nobird.app.kmm_test.data.model.User
 import ru.nobird.app.kmm_test.data.model.UsersQuery
+import ru.nobird.app.kmm_test.user.UserFeature
+import ru.nobird.app.kmm_test.user.UserFeatureBuilder
 import ru.nobird.app.kmm_test.user_list.UsersListFeature
 import ru.nobird.app.kmm_test.user_list.UsersListFeatureBuilder
 import ru.nobird.app.presentation.redux.feature.Feature
@@ -51,8 +58,16 @@ class MainActivity : AppCompatActivity() {
 
         val usersListFeature = UsersListFeatureBuilder.build()
 
+        val userFeature = UserFeatureBuilder.build()
+
         setContent {
-            MainScreen(usersListFeature)
+            val navHostController = rememberNavController()
+
+            AppNavHost(
+                navHostController = navHostController,
+                usersListFeature = usersListFeature,
+                userFeature = userFeature
+            )
         }
 
 //        viewBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -82,9 +97,99 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+enum class Screens {
+    HOME, DETAILS
+}
 
 @Composable
-private fun MainScreen(usersListFeature: Feature<UsersListFeature.State, UsersListFeature.Message, UsersListFeature.Action>) {
+private fun AppNavHost(
+    navHostController: NavHostController,
+    usersListFeature: Feature<UsersListFeature.State, UsersListFeature.Message, UsersListFeature.Action>,
+    userFeature: Feature<UserFeature.State, UserFeature.Message, UserFeature.Action>
+) {
+    NavHost(navController = navHostController, startDestination = Screens.HOME.name) {
+        composable(Screens.HOME.name) {
+            MainScreen(usersListFeature = usersListFeature, onItemClick = {
+                navHostController.navigate("${Screens.DETAILS.name}/${it.login}")
+            })
+        }
+
+        composable("${Screens.DETAILS.name}/{url}", arguments = listOf(
+            navArgument("url") {
+                type = NavType.StringType
+            }
+        )) { entry ->
+            val userUrl = entry.arguments?.getString("url")!!
+            DetailsScreen(userFeature)
+            userFeature.onNewMessage(
+                message = UserFeature.Message.Init(
+                    forceUpdate = true,
+                    userUrl = userUrl
+                )
+            )
+
+        }
+
+    }
+}
+
+@Composable
+private fun DetailsScreen(
+    userFeature: Feature<UserFeature.State, UserFeature.Message, UserFeature.Action>
+) {
+    var featureState by remember {
+        mutableStateOf(userFeature.state)
+    }
+    LocalLifecycleOwner.current.lifecycle.addCancellable {
+        userFeature.addStateListener { featureState = it }
+        userFeature
+    }
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(contentAlignment = Alignment.Center) {
+            when (val state = featureState) {
+                is UserFeature.State.Idle, is UserFeature.State.Loading -> LoadingState()
+                is UserFeature.State.NetworkError -> ErrorState()
+                is UserFeature.State.Data -> UserDataState(user = state.user)
+            }
+        }
+    }
+}
+
+@Composable
+private fun UserDataState(user: User) {
+    Scaffold(
+        topBar = {
+            TopAppBar(title = {
+                Text(text = user.login)
+            })
+        },
+        content = {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = rememberImagePainter(data = user.avatarUrl),
+                    contentDescription = "avatar",
+                    modifier = Modifier
+                        .width(60.dp)
+                        .height(60.dp)
+                )
+            }
+        }
+    )
+}
+
+
+@Composable
+private fun MainScreen(
+    usersListFeature: Feature<UsersListFeature.State, UsersListFeature.Message, UsersListFeature.Action>,
+    onItemClick: (User) -> Unit
+) {
     var queryText by remember { mutableStateOf("test") }
     var featureState by remember { mutableStateOf(usersListFeature.state) }
 
@@ -118,7 +223,10 @@ private fun MainScreen(usersListFeature: Feature<UsersListFeature.State, UsersLi
             label = { Text(text = "Query") },
             keyboardActions = KeyboardActions(onSearch = {
                 usersListFeature.onNewMessage(
-                    UsersListFeature.Message.Init(forceUpdate = true, UsersQuery(userName = queryText))
+                    UsersListFeature.Message.Init(
+                        forceUpdate = true,
+                        UsersQuery(userName = queryText)
+                    )
                 )
                 focusManager.clearFocus()
             }),
@@ -135,7 +243,7 @@ private fun MainScreen(usersListFeature: Feature<UsersListFeature.State, UsersLi
                     LoadingState()
 
                 is UsersListFeature.State.Data ->
-                    DataState(state = state) {
+                    DataState(state = state, onItemClick) {
                         usersListFeature.onNewMessage(UsersListFeature.Message.LoadNextPage)
                     }
 
@@ -158,14 +266,42 @@ fun ErrorState() {
 }
 
 @Composable
-fun DataState(state: UsersListFeature.State.Data, onLoadMore: () -> Unit) {
+fun UserData(user: User, onItemClick: (User) -> Unit) {
+    Row(
+        modifier = Modifier
+            .clickable {
+                onItemClick.invoke(user)
+            }
+            .padding(8.dp)
+    ) {
+        Image(
+            painter = rememberImagePainter(data = user.avatarUrl),
+            contentDescription = user.avatarUrl,
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .align(Alignment.CenterVertically)
+                .border(1.5.dp, MaterialTheme.colors.secondary, CircleShape)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Column {
+            Text(text = user.login, style = MaterialTheme.typography.subtitle1)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = "Type: ${user.type}", style = MaterialTheme.typography.subtitle2)
+        }
+    }
+}
+
+@Composable
+fun DataState(
+    state: UsersListFeature.State.Data,
+    onItemClick: (User) -> Unit,
+    onLoadMore: () -> Unit
+) {
     val listState = rememberLazyListState()
     LazyColumn(state = listState, modifier = Modifier.fillMaxWidth()) {
         itemsIndexed(state.users, key = { _, item -> item.id }) { index, item ->
-            Text(
-                text = item.login,
-                modifier = Modifier.padding(16.dp)
-            )
+            UserData(user = item, onItemClick)
 
             if (index + 3 > state.users.size) {
                 SideEffect {
@@ -176,7 +312,10 @@ fun DataState(state: UsersListFeature.State.Data, onLoadMore: () -> Unit) {
 
         if (state.isLoading) {
             item {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .padding(16.dp)

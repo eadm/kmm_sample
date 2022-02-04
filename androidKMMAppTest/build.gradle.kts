@@ -14,6 +14,8 @@ dependencies {
 
     implementation(libs.bundles.ktor.common)
     implementation(libs.bundles.android.compose)
+    implementation(libs.android.compose.koil)
+    implementation(libs.android.compose.navigation)
 
     testImplementation(libs.bundles.android.test)
 }
