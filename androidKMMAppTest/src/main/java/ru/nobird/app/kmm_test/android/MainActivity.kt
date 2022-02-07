@@ -3,28 +3,26 @@ package ru.nobird.app.kmm_test.android
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,8 +33,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import coil.compose.rememberImagePainter
 import ru.nobird.app.core.model.Cancellable
 import ru.nobird.app.kmm_test.android.databinding.ActivityMainBinding
+import ru.nobird.app.kmm_test.data.model.User
 import ru.nobird.app.kmm_test.data.model.UsersQuery
 import ru.nobird.app.kmm_test.user_list.UsersListFeature
 import ru.nobird.app.kmm_test.user_list.UsersListFeatureBuilder
@@ -52,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         val usersListFeature = UsersListFeatureBuilder.build()
 
         setContent {
-            MainScreen(usersListFeature)
+            Navigator(screen = MainScreen(usersListFeature))
         }
 
 //        viewBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -82,19 +85,37 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+@Composable
+fun DetailsContent(
+    user: User
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                modifier = Modifier
+                    .height(80.dp)
+                    .width(80.dp),
+                painter = rememberImagePainter(user.avatarUrl),
+                contentDescription = "avatar :${user.gravatarId}"
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "User nickname: ${user.login}")
+        }
+    }
+}
 
 @Composable
-private fun MainScreen(usersListFeature: Feature<UsersListFeature.State, UsersListFeature.Message, UsersListFeature.Action>) {
+fun MainContent(usersListFeature: Feature<UsersListFeature.State, UsersListFeature.Message, UsersListFeature.Action>) {
     var queryText by remember { mutableStateOf("test") }
-    var featureState by remember { mutableStateOf(usersListFeature.state) }
 
     val focusManager = LocalFocusManager.current
 
-    LocalLifecycleOwner.current.lifecycle
-        .addCancellable {
-            usersListFeature.addStateListener { featureState = it }
-            usersListFeature
-        }
+    val featureState by usersListFeature.observeState()
 
 //    LocalLifecycleOwner.current.lifecycle
 //        .addCancellable {
@@ -118,7 +139,10 @@ private fun MainScreen(usersListFeature: Feature<UsersListFeature.State, UsersLi
             label = { Text(text = "Query") },
             keyboardActions = KeyboardActions(onSearch = {
                 usersListFeature.onNewMessage(
-                    UsersListFeature.Message.Init(forceUpdate = true, UsersQuery(userName = queryText))
+                    UsersListFeature.Message.Init(
+                        forceUpdate = true,
+                        UsersQuery(userName = queryText)
+                    )
                 )
                 focusManager.clearFocus()
             }),
@@ -158,14 +182,33 @@ fun ErrorState() {
 }
 
 @Composable
+fun UserItem(user: User, navigator: Navigator) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+        .clickable {
+            navigator.push(DetailsScreen(user))
+        }
+        .focusable(true)
+        .fillMaxWidth()
+        .padding(16.dp)) {
+        Image(
+            modifier = Modifier
+                .width(40.dp)
+                .height(40.dp),
+            painter = rememberImagePainter(user.avatarUrl),
+            contentDescription = "Avatar: ${user.avatarUrl}"
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = user.login)
+    }
+}
+
+@Composable
 fun DataState(state: UsersListFeature.State.Data, onLoadMore: () -> Unit) {
     val listState = rememberLazyListState()
+    val navigator = LocalNavigator.currentOrThrow
     LazyColumn(state = listState, modifier = Modifier.fillMaxWidth()) {
         itemsIndexed(state.users, key = { _, item -> item.id }) { index, item ->
-            Text(
-                text = item.login,
-                modifier = Modifier.padding(16.dp)
-            )
+            UserItem(user = item, navigator = navigator)
 
             if (index + 3 > state.users.size) {
                 SideEffect {
