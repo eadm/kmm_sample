@@ -20,13 +20,13 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		4ABBA2524E844B0919D82EE12DDFDB8E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		65F549FBA393165A2982418364A77CD0 /* Pods-iosKMMAppTest-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 64DE703A075EF43FB2622B471C3D9BF1 /* Pods-iosKMMAppTest-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		66092E57BCF8C2545187D5BF0267A2CE /* Pods-iosKMMAppTest-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 596132CF27966B1796C798412F1B7E0A /* Pods-iosKMMAppTest-dummy.m */; };
+		0D7A662CD1FF09E3C61AE4EF9E146F49 /* Pods-iosKMMAppTest-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 64DE703A075EF43FB2622B471C3D9BF1 /* Pods-iosKMMAppTest-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6CBF95E33BC86B26492D81E96D6102E5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
+		B596F6C9CC388253510624401142578D /* Pods-iosKMMAppTest-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 596132CF27966B1796C798412F1B7E0A /* Pods-iosKMMAppTest-dummy.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2AF7525B7D1A1C702D6C891426D92347 /* PBXContainerItemProxy */ = {
+		AF29931F0893F272837B61E324116F90 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
@@ -41,7 +41,7 @@
 		5CB3DDD960E7A4F1A72826EC0AAAE09E /* Pods-iosKMMAppTest-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-iosKMMAppTest-acknowledgements.plist"; sourceTree = "<group>"; };
 		64DE703A075EF43FB2622B471C3D9BF1 /* Pods-iosKMMAppTest-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-iosKMMAppTest-umbrella.h"; sourceTree = "<group>"; };
 		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		74DE05897B2758727F069488629C6A31 /* Pods-iosKMMAppTest */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-iosKMMAppTest"; path = Pods_iosKMMAppTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		74DE05897B2758727F069488629C6A31 /* Pods_iosKMMAppTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_iosKMMAppTest.framework; path = "Pods-iosKMMAppTest.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FABE2A2EF0EA3ECE5B49FE7DCD41C12 /* Pods-iosKMMAppTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iosKMMAppTest.debug.xcconfig"; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9F908D2588F86925882B98D1ED27B5C5 /* shared.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = shared.framework; path = build/cocoapods/framework/shared.framework; sourceTree = "<group>"; };
@@ -54,11 +54,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		FA110A520FE83F6651C85FF1BE016EAD /* Frameworks */ = {
+		1520C1A39F6296C159A887642EB78752 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4ABBA2524E844B0919D82EE12DDFDB8E /* Foundation.framework in Frameworks */,
+				6CBF95E33BC86B26492D81E96D6102E5 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,14 +100,6 @@
 			name = "Development Pods";
 			sourceTree = "<group>";
 		};
-		3EF927E01D60432D762196D2C4B85020 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				74DE05897B2758727F069488629C6A31 /* Pods-iosKMMAppTest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		578452D2E740E91742655AC8F1636D1F /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,6 +126,14 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
+		AAF2E358821C612B706AECAFE6B00D24 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				74DE05897B2758727F069488629C6A31 /* Pods_iosKMMAppTest.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		C5DC7C56FE229A1A9FDC8AA30EA8321B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -156,7 +156,7 @@
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
 				313FE5FE915A4A924C55AAC02A910D61 /* Development Pods */,
 				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
-				3EF927E01D60432D762196D2C4B85020 /* Products */,
+				AAF2E358821C612B706AECAFE6B00D24 /* Products */,
 				8531AB127292C39B2A973469FA28C0D1 /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
@@ -172,11 +172,11 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		85258A542C25D0CD7AAD60A60AB94C80 /* Headers */ = {
+		32C81D625AA2A754FE9EA32A8AD7B637 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				65F549FBA393165A2982418364A77CD0 /* Pods-iosKMMAppTest-umbrella.h in Headers */,
+				0D7A662CD1FF09E3C61AE4EF9E146F49 /* Pods-iosKMMAppTest-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,21 +185,21 @@
 /* Begin PBXNativeTarget section */
 		E91CC2357B1F26A4ADCFC67388505DD9 /* Pods-iosKMMAppTest */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5A734B1E5ED95A992F25D37350AC9E48 /* Build configuration list for PBXNativeTarget "Pods-iosKMMAppTest" */;
+			buildConfigurationList = A3035A0CB92B7C4EDDCDE9D8695707DF /* Build configuration list for PBXNativeTarget "Pods-iosKMMAppTest" */;
 			buildPhases = (
-				85258A542C25D0CD7AAD60A60AB94C80 /* Headers */,
-				06229961FDCD0E675F518ACCC46C2EB4 /* Sources */,
-				FA110A520FE83F6651C85FF1BE016EAD /* Frameworks */,
-				7B08E27B26A44F3A053C5513216D3EC2 /* Resources */,
+				32C81D625AA2A754FE9EA32A8AD7B637 /* Headers */,
+				4E8E13A90497DF6A849AE66A4DDA5D11 /* Sources */,
+				1520C1A39F6296C159A887642EB78752 /* Frameworks */,
+				F618EB2E8ADAE7BF3E36D1B56E41D8DE /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				79BBFFD7CDA7A95DB7D9E7BFA4EDCF33 /* PBXTargetDependency */,
+				4F347301889724E6F8C8BEFD42E41600 /* PBXTargetDependency */,
 			);
 			name = "Pods-iosKMMAppTest";
-			productName = Pods_iosKMMAppTest;
-			productReference = 74DE05897B2758727F069488629C6A31 /* Pods-iosKMMAppTest */;
+			productName = "Pods-iosKMMAppTest";
+			productReference = 74DE05897B2758727F069488629C6A31 /* Pods_iosKMMAppTest.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -208,19 +208,19 @@
 		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1240;
+				LastSwiftUpdateCheck = 1100;
+				LastUpgradeCheck = 1100;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				Base,
 				en,
+				Base,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
-			productRefGroup = 3EF927E01D60432D762196D2C4B85020 /* Products */;
+			productRefGroup = AAF2E358821C612B706AECAFE6B00D24 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -231,7 +231,7 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		7B08E27B26A44F3A053C5513216D3EC2 /* Resources */ = {
+		F618EB2E8ADAE7BF3E36D1B56E41D8DE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -254,22 +254,22 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		06229961FDCD0E675F518ACCC46C2EB4 /* Sources */ = {
+		4E8E13A90497DF6A849AE66A4DDA5D11 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				66092E57BCF8C2545187D5BF0267A2CE /* Pods-iosKMMAppTest-dummy.m in Sources */,
+				B596F6C9CC388253510624401142578D /* Pods-iosKMMAppTest-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		79BBFFD7CDA7A95DB7D9E7BFA4EDCF33 /* PBXTargetDependency */ = {
+		4F347301889724E6F8C8BEFD42E41600 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = shared;
 			target = 8777C9F6889E59EFFD631D80AEE9048B /* shared */;
-			targetProxy = 2AF7525B7D1A1C702D6C891426D92347 /* PBXContainerItemProxy */;
+			targetProxy = AF29931F0893F272837B61E324116F90 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -292,7 +292,7 @@
 			};
 			name = Release;
 		};
-		293028ED40A759B259EDF79EB35BE6D1 /* Debug */ = {
+		34AD5274F0FBE37FC4A05E2BD238B948 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8FABE2A2EF0EA3ECE5B49FE7DCD41C12 /* Pods-iosKMMAppTest.debug.xcconfig */;
 			buildSettings = {
@@ -328,6 +328,44 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
+		};
+		3BE2E5E557BD82BA35F1EF17FB34CC94 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A946F987F9B63770A3A1996AEF98B51C /* Pods-iosKMMAppTest.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-iosKMMAppTest/Pods-iosKMMAppTest-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-iosKMMAppTest/Pods-iosKMMAppTest.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
 		};
 		593F10BFFA94DAC7D6E17FB8A7F32D72 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -388,44 +426,6 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
-			};
-			name = Release;
-		};
-		59A4E959769510559B5AA40832D12475 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = A946F987F9B63770A3A1996AEF98B51C /* Pods-iosKMMAppTest.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-iosKMMAppTest/Pods-iosKMMAppTest-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-iosKMMAppTest/Pods-iosKMMAppTest.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
@@ -524,20 +524,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5A734B1E5ED95A992F25D37350AC9E48 /* Build configuration list for PBXNativeTarget "Pods-iosKMMAppTest" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				293028ED40A759B259EDF79EB35BE6D1 /* Debug */,
-				59A4E959769510559B5AA40832D12475 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		9FAF69EFFAE27522789F3CA719BA83DE /* Build configuration list for PBXAggregateTarget "shared" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F80DE7EBDDFC80B4D52BCACF2249C6B6 /* Debug */,
 				1B6EAB28480B60AB33A8B63338687E30 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A3035A0CB92B7C4EDDCDE9D8695707DF /* Build configuration list for PBXNativeTarget "Pods-iosKMMAppTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34AD5274F0FBE37FC4A05E2BD238B948 /* Debug */,
+				3BE2E5E557BD82BA35F1EF17FB34CC94 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

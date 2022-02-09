@@ -1,4 +1,4 @@
-package ru.nobird.app.kmm_test.data.model
+package ru.nobird.app.kmm_test.data.users.list.model
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName

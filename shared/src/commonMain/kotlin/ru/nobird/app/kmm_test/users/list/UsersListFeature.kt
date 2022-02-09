@@ -1,7 +1,7 @@
-package ru.nobird.app.kmm_test.user_list
+package ru.nobird.app.kmm_test.users.list
 
-import ru.nobird.app.kmm_test.data.model.User
-import ru.nobird.app.kmm_test.data.model.UsersQuery
+import ru.nobird.app.kmm_test.data.users.list.model.User
+import ru.nobird.app.kmm_test.data.users.list.model.UsersQuery
 
 interface UsersListFeature {
     sealed interface State {
