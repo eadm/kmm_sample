@@ -7,12 +7,17 @@ sealed interface ApplicationFeature {
     }
 
     sealed interface State {
-        data class Screen(val feature: Feature) : State
+        val stack: ArrayDeque<Feature>
+        data class Screen(
+            val feature: Feature,
+            override val stack: ArrayDeque<Feature>
+        ) : State
     }
 
     sealed interface Message {
-        object NavigateClick : Message
+        data class NavigateClick(val feature: Feature) : Message
         data class FeatureChanged(val feature: Feature) : Message
+        object BackPressed : Message
     }
 
     sealed interface Action {

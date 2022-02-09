@@ -10,7 +10,10 @@ import ru.nobird.app.presentation.redux.dispatcher.wrapWithActionDispatcher
 object ApplicationFeatureBuilder {
     fun build(): Feature<State, Message, Action> =
         ReduxFeature(
-            State.Screen(feature = ApplicationFeature.Feature.USERS_LIST),
+            State.Screen(
+                feature = ApplicationFeature.Feature.USERS_LIST,
+                stack = ArrayDeque(listOf(ApplicationFeature.Feature.USERS_LIST))
+            ),
             ApplicationReducer()
         ).wrapWithActionDispatcher(ApplicationDispatcher())
 }

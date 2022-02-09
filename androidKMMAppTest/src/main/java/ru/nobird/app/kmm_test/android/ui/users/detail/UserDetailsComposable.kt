@@ -8,10 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import ru.nobird.app.kmm_test.android.ui.ErrorState
-import ru.nobird.app.kmm_test.android.ui.LoadingState
-import ru.nobird.app.kmm_test.android.ui.addCancellable
-import ru.nobird.app.kmm_test.android.ui.flatTopBar
+import ru.nobird.app.kmm_test.android.ui.*
 import ru.nobird.app.kmm_test.users.detail.UserDetailsFeature
 import ru.nobird.app.presentation.redux.feature.Feature
 
@@ -21,7 +18,10 @@ fun UserDetailsComposable(
         UserDetailsFeature.State,
         UserDetailsFeature.Message,
         UserDetailsFeature.Action>,
-    onBackClicked: () -> Unit) {
+    onBackClicked: () -> Unit
+) {
+
+    BackPressHandler(onBackPressed = onBackClicked)
 
     var featureState by remember { mutableStateOf(userFeature.state) }
 
@@ -34,7 +34,12 @@ fun UserDetailsComposable(
     userFeature.onNewMessage(
         UserDetailsFeature.Message.Init(forceUpdate = true, "eadm")
     )
-    Scaffold(topBar = flatTopBar(title = "User Detail", navigationClick = onBackClicked)) {
+    Scaffold(
+        topBar = flatTopBar(
+            title = "User Detail",
+            navigationClick = onBackClicked
+        )
+    ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
