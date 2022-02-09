@@ -90,7 +90,7 @@ fun ErrorState() {
 
 fun flatTopBar(
     title: String,
-    navigationClick: UnitListener? = null,
+    navigationClick: (() -> Unit)? = null,
 ) = @Composable {
     TopAppBar(
         title = { Text(text = title) },
@@ -99,7 +99,7 @@ fun flatTopBar(
 }
 
 @Composable
-fun navigationIcon(onClick: () -> Unit): @Composable UnitListener = {
+fun navigationIcon(onClick: () -> Unit): @Composable (() -> Unit) = {
     IconButton(onClick = onClick) {
         Icon(
             imageVector = Icons.Filled.ArrowBack,
@@ -108,4 +108,3 @@ fun navigationIcon(onClick: () -> Unit): @Composable UnitListener = {
     }
 }
 
-typealias UnitListener = (() -> Unit)

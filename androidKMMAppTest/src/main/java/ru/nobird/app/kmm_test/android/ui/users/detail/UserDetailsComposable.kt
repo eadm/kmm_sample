@@ -32,7 +32,7 @@ fun UserDetailsComposable(
         }
 
     userFeature.onNewMessage(
-        UserDetailsFeature.Message.Init(forceUpdate = true, "eadm")
+        UserDetailsFeature.Message.Init(forceUpdate = true, userName = "eadm")
     )
     Scaffold(
         topBar = flatTopBar(
@@ -52,7 +52,13 @@ fun UserDetailsComposable(
                         LoadingState()
 
                     is UserDetailsFeature.State.Data ->
-                        Text(text = state.userDetails.login ?: "Unknown")
+                        with(state.userDetails) {
+                            Text(text =
+                                "Login: $login \n" +
+                                "Email: $email \n" +
+                                "Name:  $name"
+                            )
+                        }
 
                     is UserDetailsFeature.State.NetworkError ->
                         ErrorState()
