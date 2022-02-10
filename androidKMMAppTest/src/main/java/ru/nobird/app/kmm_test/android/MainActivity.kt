@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -22,17 +21,16 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -42,8 +40,6 @@ import ru.nobird.app.kmm_test.android.databinding.ActivityMainBinding
 import ru.nobird.app.kmm_test.data.model.User
 import ru.nobird.app.kmm_test.data.model.UsersQuery
 import ru.nobird.app.kmm_test.user_list.UsersListFeature
-import ru.nobird.app.kmm_test.user_list.UsersListFeatureBuilder
-import ru.nobird.app.presentation.redux.feature.Feature
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityMainBinding
@@ -52,10 +48,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val usersListFeature = UsersListFeatureBuilder.build()
-
         setContent {
-            Navigator(screen = MainScreen(usersListFeature))
+            Navigator(screen = MainScreen)
         }
 
 //        viewBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -87,7 +81,7 @@ class MainActivity : AppCompatActivity() {
 
 @Composable
 fun DetailsContent(
-    user: User
+    user: UiUser
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
@@ -110,10 +104,12 @@ fun DetailsContent(
 }
 
 @Composable
-fun MainContent(usersListFeature: Feature<UsersListFeature.State, UsersListFeature.Message, UsersListFeature.Action>) {
+fun MainContent(model: MainViewModel = viewModel()) {
     var queryText by remember { mutableStateOf("test") }
 
     val focusManager = LocalFocusManager.current
+
+    val usersListFeature = model.feature.value!!
 
     val featureState by usersListFeature.observeState()
 
@@ -185,7 +181,31 @@ fun ErrorState() {
 fun UserItem(user: User, navigator: Navigator) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
         .clickable {
-            navigator.push(DetailsScreen(user))
+            navigator.push(
+                DetailsScreen(
+                    UiUser(
+                        user.avatarUrl,
+                        user.eventsUrl,
+                        user.followersUrl,
+                        user.followingUrl,
+                        user.gistsUrl,
+                        user.gravatarId,
+                        user.htmlUrl,
+                        user.id,
+                        user.login,
+                        user.nodeId,
+                        user.organizationsUrl,
+                        user.receivedEventsUrl,
+                        user.reposUrl,
+                        user.score,
+                        user.siteAdmin,
+                        user.starredUrl,
+                        user.subscriptionsUrl,
+                        user.type,
+                        user.url,
+                    )
+                )
+            )
         }
         .focusable(true)
         .fillMaxWidth()
