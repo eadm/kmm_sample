@@ -8,7 +8,7 @@ import ru.nobird.app.kmm_test.aplication.ApplicationFeature.State
 class ApplicationReducer : StateReducer<State, Message, Action> {
     override fun reduce(state: State, message: Message): Pair<State, Set<Action>> =
         when(message) {
-            is Message.NavigateClick ->
+            is Message.Navigate ->
                 if (state is State.Screen) {
                     state to setOf(Action.ChangeFeature(message.feature))
                 } else {

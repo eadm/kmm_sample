@@ -29,7 +29,7 @@ fun KMMAppSample(feature: Feature<State, Message, Action>) {
                 USERS_LIST -> {
                     MainScreen(usersListFeature = UsersListFeatureBuilder.build()) {
                         //click on user
-                        feature.onNewMessage(Message.NavigateClick(USERS_DETAIL))
+                        feature.onNewMessage(Message.Navigate(USERS_DETAIL))
                     }
                 }
                 USERS_DETAIL ->

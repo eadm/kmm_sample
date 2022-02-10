@@ -15,7 +15,7 @@ sealed interface ApplicationFeature {
     }
 
     sealed interface Message {
-        data class NavigateClick(val feature: Feature) : Message
+        data class Navigate(val feature: Feature) : Message
         data class FeatureChanged(val feature: Feature) : Message
         object BackPressed : Message
     }
