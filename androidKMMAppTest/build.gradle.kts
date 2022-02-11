@@ -1,6 +1,11 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
+}
+kapt {
+    correctErrorTypes = true
 }
 
 dependencies {
@@ -14,6 +19,9 @@ dependencies {
 
     implementation(libs.bundles.ktor.common)
     implementation(libs.bundles.android.compose)
+    implementation("com.chrynan.parcelable:parcelable-android:0.3.1")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     testImplementation(libs.bundles.android.test)
 }

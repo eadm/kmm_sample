@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,17 +30,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import coil.compose.rememberImagePainter
+import dagger.hilt.android.AndroidEntryPoint
 import ru.nobird.app.core.model.Cancellable
 import ru.nobird.app.kmm_test.android.databinding.ActivityMainBinding
 import ru.nobird.app.kmm_test.data.model.User
 import ru.nobird.app.kmm_test.data.model.UsersQuery
 import ru.nobird.app.kmm_test.user_list.UsersListFeature
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityMainBinding
     private val usersAdapter = UsersAdapter()
@@ -81,7 +82,7 @@ class MainActivity : AppCompatActivity() {
 
 @Composable
 fun DetailsContent(
-    user: UiUser
+    userDetails: UserDetails
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
@@ -94,22 +95,22 @@ fun DetailsContent(
                 modifier = Modifier
                     .height(80.dp)
                     .width(80.dp),
-                painter = rememberImagePainter(user.avatarUrl),
-                contentDescription = "avatar :${user.gravatarId}"
+                painter = rememberImagePainter(userDetails.avatarUrl),
+                contentDescription = "avatar :${userDetails.gravatarId}"
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "User nickname: ${user.login}")
+            Text(text = "User nickname: ${userDetails.login}")
         }
     }
 }
 
 @Composable
-fun MainContent(model: MainViewModel = viewModel()) {
-    var queryText by remember { mutableStateOf("test") }
+fun MainContent(model: MainViewModel) {
+    var queryText by rememberSaveable { mutableStateOf("test") }
 
     val focusManager = LocalFocusManager.current
 
-    val usersListFeature = model.feature.value!!
+    val usersListFeature = model.feature
 
     val featureState by usersListFeature.observeState()
 
@@ -183,7 +184,7 @@ fun UserItem(user: User, navigator: Navigator) {
         .clickable {
             navigator.push(
                 DetailsScreen(
-                    UiUser(
+                    UserDetails(
                         user.avatarUrl,
                         user.eventsUrl,
                         user.followersUrl,

@@ -14,6 +14,7 @@ buildscript {
         classpath(libs.plugin.android)
         classpath(libs.plugin.ktlint)
         classpath(libs.plugin.gradleVersionUpdates)
+        classpath(libs.plugin.hilt)
     }
 }
 
@@ -29,6 +30,7 @@ allprojects {
         mavenCentral()
         github(project, "https://maven.pkg.github.com/eadm/AndroidKit")
         github(project, "https://maven.pkg.github.com/eadm/ktlint-rules")
+        maven("https://repo.repsy.io/mvn/chrynan/public")
         mavenLocal()
     }
 }

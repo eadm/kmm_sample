@@ -1,9 +1,8 @@
 package ru.nobird.app.kmm_test.android
 
-import ru.nobird.app.kmm_test.data.model.User
 import java.io.Serializable
 
-data class UiUser(
+data class UserDetails(
     val avatarUrl: String,
     val eventsUrl: String,
     val followersUrl: String,
