@@ -34,8 +34,13 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import coil.compose.rememberImagePainter
+import com.chrynan.parcelable.android.encodeToBundle
+import com.chrynan.parcelable.android.putParcelable
+import com.chrynan.parcelable.core.Parcelable
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.serialization.ExperimentalSerializationApi
 import ru.nobird.app.core.model.Cancellable
+import ru.nobird.app.kmm_test.android.DetailsScreen.Companion.USER_KEY
 import ru.nobird.app.kmm_test.android.databinding.ActivityMainBinding
 import ru.nobird.app.kmm_test.data.model.User
 import ru.nobird.app.kmm_test.data.model.UsersQuery
@@ -82,7 +87,7 @@ class MainActivity : AppCompatActivity() {
 
 @Composable
 fun DetailsContent(
-    userDetails: UserDetails
+    userDetails: User
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
@@ -178,34 +183,17 @@ fun ErrorState() {
     Text(text = "Network error")
 }
 
+@ExperimentalSerializationApi
 @Composable
 fun UserItem(user: User, navigator: Navigator) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
         .clickable {
+            val parcelable = Parcelable.Default
+            val bundle = Bundle()
+            bundle.putParcelable(USER_KEY, user, parcelable)
+
             navigator.push(
-                DetailsScreen(
-                    UserDetails(
-                        user.avatarUrl,
-                        user.eventsUrl,
-                        user.followersUrl,
-                        user.followingUrl,
-                        user.gistsUrl,
-                        user.gravatarId,
-                        user.htmlUrl,
-                        user.id,
-                        user.login,
-                        user.nodeId,
-                        user.organizationsUrl,
-                        user.receivedEventsUrl,
-                        user.reposUrl,
-                        user.score,
-                        user.siteAdmin,
-                        user.starredUrl,
-                        user.subscriptionsUrl,
-                        user.type,
-                        user.url,
-                    )
-                )
+                DetailsScreen(bundle)
             )
         }
         .focusable(true)
