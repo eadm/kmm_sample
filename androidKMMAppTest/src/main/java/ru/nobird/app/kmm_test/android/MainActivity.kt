@@ -15,13 +15,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,17 +37,13 @@ import androidx.navigation.navArgument
 import coil.compose.rememberImagePainter
 import dagger.hilt.android.AndroidEntryPoint
 import ru.nobird.app.core.model.Cancellable
-import ru.nobird.app.kmm_test.android.databinding.ActivityMainBinding
 import ru.nobird.app.kmm_test.data.model.User
 import ru.nobird.app.kmm_test.data.model.UsersQuery
 import ru.nobird.app.kmm_test.user.UserFeature
-import ru.nobird.app.kmm_test.user.UserFeatureBuilder
 import ru.nobird.app.kmm_test.user_list.UsersListFeature
-import ru.nobird.app.kmm_test.user_list.UsersListFeatureBuilder
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private lateinit var viewBinding: ActivityMainBinding
     private val usersAdapter = UsersAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,19 +117,16 @@ private fun DetailsScreen(
     userUrl: String
 ) {
     val userFeature = viewModel.feature
-    var featureState by remember {
-        mutableStateOf(userFeature.state)
-    }
-    LocalLifecycleOwner.current.lifecycle.addCancellable {
-        userFeature.addStateListener { featureState = it }
-        userFeature
-    }
-    userFeature.onNewMessage(
-        message = UserFeature.Message.Init(
-            forceUpdate = true,
-            userUrl = userUrl
+    val featureState by userFeature.observeState()
+
+    LaunchedEffect(key1 = userUrl) {
+        userFeature.onNewMessage(
+            message = UserFeature.Message.Init(
+                forceUpdate = true,
+                userUrl = userUrl
+            )
         )
-    )
+    }
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -186,14 +174,9 @@ private fun MainScreen(
 ) {
     var queryText by rememberSaveable { mutableStateOf("test") }
     val usersListFeature = viewModel.feature
-    var featureState by remember { mutableStateOf(usersListFeature.state) }
+    val featureState by usersListFeature.observeState()
 
     val focusManager = LocalFocusManager.current
-
-    LocalLifecycleOwner.current.lifecycle
-        .addCancellable {
-            usersListFeature.addStateListener { featureState = it }
-        }
 
     LocalLifecycleOwner.current.lifecycle
         .addCancellable {
