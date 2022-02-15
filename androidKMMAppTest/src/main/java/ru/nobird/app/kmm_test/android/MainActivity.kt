@@ -1,7 +1,6 @@
 package ru.nobird.app.kmm_test.android
 
 import android.os.Bundle
-import android.text.util.Linkify
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
@@ -21,6 +20,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -39,6 +40,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import coil.compose.rememberImagePainter
+import dagger.hilt.android.AndroidEntryPoint
 import ru.nobird.app.core.model.Cancellable
 import ru.nobird.app.kmm_test.android.databinding.ActivityMainBinding
 import ru.nobird.app.kmm_test.data.model.User
@@ -47,8 +49,8 @@ import ru.nobird.app.kmm_test.user.UserFeature
 import ru.nobird.app.kmm_test.user.UserFeatureBuilder
 import ru.nobird.app.kmm_test.user_list.UsersListFeature
 import ru.nobird.app.kmm_test.user_list.UsersListFeatureBuilder
-import ru.nobird.app.presentation.redux.feature.Feature
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityMainBinding
     private val usersAdapter = UsersAdapter()
@@ -56,17 +58,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val usersListFeature = UsersListFeatureBuilder.build()
-
-        val userFeature = UserFeatureBuilder.build()
-
         setContent {
             val navHostController = rememberNavController()
 
             AppNavHost(
-                navHostController = navHostController,
-                usersListFeature = usersListFeature,
-                userFeature = userFeature
+                navHostController = navHostController
             )
         }
 
@@ -103,13 +99,11 @@ enum class Screens {
 
 @Composable
 private fun AppNavHost(
-    navHostController: NavHostController,
-    usersListFeature: Feature<UsersListFeature.State, UsersListFeature.Message, UsersListFeature.Action>,
-    userFeature: Feature<UserFeature.State, UserFeature.Message, UserFeature.Action>
+    navHostController: NavHostController
 ) {
     NavHost(navController = navHostController, startDestination = Screens.HOME.name) {
         composable(Screens.HOME.name) {
-            MainScreen(usersListFeature = usersListFeature, onItemClick = {
+            MainScreen(viewModel = hiltViewModel(), onItemClick = {
                 navHostController.navigate("${Screens.DETAILS.name}/${it.login}")
             })
         }
@@ -120,14 +114,7 @@ private fun AppNavHost(
             }
         )) { entry ->
             val userUrl = entry.arguments?.getString("url")!!
-            DetailsScreen(userFeature)
-            userFeature.onNewMessage(
-                message = UserFeature.Message.Init(
-                    forceUpdate = true,
-                    userUrl = userUrl
-                )
-            )
-
+            DetailsScreen(viewModel = hiltViewModel(), userUrl)
         }
 
     }
@@ -135,8 +122,10 @@ private fun AppNavHost(
 
 @Composable
 private fun DetailsScreen(
-    userFeature: Feature<UserFeature.State, UserFeature.Message, UserFeature.Action>
+    viewModel: DetailsViewModel,
+    userUrl: String
 ) {
+    val userFeature = viewModel.feature
     var featureState by remember {
         mutableStateOf(userFeature.state)
     }
@@ -144,7 +133,12 @@ private fun DetailsScreen(
         userFeature.addStateListener { featureState = it }
         userFeature
     }
-
+    userFeature.onNewMessage(
+        message = UserFeature.Message.Init(
+            forceUpdate = true,
+            userUrl = userUrl
+        )
+    )
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -187,10 +181,11 @@ private fun UserDataState(user: User) {
 
 @Composable
 private fun MainScreen(
-    usersListFeature: Feature<UsersListFeature.State, UsersListFeature.Message, UsersListFeature.Action>,
+    viewModel: MainViewModel,
     onItemClick: (User) -> Unit
 ) {
-    var queryText by remember { mutableStateOf("test") }
+    var queryText by rememberSaveable { mutableStateOf("test") }
+    val usersListFeature = viewModel.feature
     var featureState by remember { mutableStateOf(usersListFeature.state) }
 
     val focusManager = LocalFocusManager.current
