@@ -29,6 +29,7 @@ allprojects {
         mavenCentral()
         github(project, "https://maven.pkg.github.com/eadm/AndroidKit")
         github(project, "https://maven.pkg.github.com/eadm/ktlint-rules")
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         mavenLocal()
     }
 }

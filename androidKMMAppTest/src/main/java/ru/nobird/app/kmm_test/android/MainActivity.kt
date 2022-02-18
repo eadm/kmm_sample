@@ -1,16 +1,13 @@
 package ru.nobird.app.kmm_test.android
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.progressSemantics
@@ -21,39 +18,43 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import coil.compose.rememberImagePainter
+import com.alphicc.brick.AndroidAnimatedScreensContainer
+import com.alphicc.brick.TreeRouter
 import ru.nobird.app.core.model.Cancellable
 import ru.nobird.app.kmm_test.android.databinding.ActivityMainBinding
+import ru.nobird.app.kmm_test.data.model.User
 import ru.nobird.app.kmm_test.data.model.UsersQuery
 import ru.nobird.app.kmm_test.user_list.UsersListFeature
-import ru.nobird.app.kmm_test.user_list.UsersListFeatureBuilder
-import ru.nobird.app.presentation.redux.feature.Feature
 
-class MainActivity : AppCompatActivity() {
+val router = TreeRouter.new()
+
+@ExperimentalAnimationApi
+class MainActivity : ComponentActivity() {
     private lateinit var viewBinding: ActivityMainBinding
     private val usersAdapter = UsersAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val usersListFeature = UsersListFeatureBuilder.build()
-
         setContent {
-            MainScreen(usersListFeature)
+            AndroidAnimatedScreensContainer(containerConnector = router)
         }
+        router.addScreen(Screens.mainScreen, router)
 
 //        viewBinding = ActivityMainBinding.inflate(layoutInflater)
 //        setContentView(viewBinding.root)
@@ -84,16 +85,12 @@ class MainActivity : AppCompatActivity() {
 
 
 @Composable
-private fun MainScreen(usersListFeature: Feature<UsersListFeature.State, UsersListFeature.Message, UsersListFeature.Action>) {
-    var queryText by remember { mutableStateOf("test") }
-    var featureState by remember { mutableStateOf(usersListFeature.state) }
+fun MainScreen(viewModel: MainViewModel) {
+    val usersListFeature = viewModel.feature
+    var queryText by rememberSaveable { mutableStateOf("test") }
+    val featureState by usersListFeature.observeState()
 
     val focusManager = LocalFocusManager.current
-
-    LocalLifecycleOwner.current.lifecycle
-        .addCancellable {
-            usersListFeature.addStateListener { featureState = it }
-        }
 
     LocalLifecycleOwner.current.lifecycle
         .addCancellable {
@@ -116,7 +113,10 @@ private fun MainScreen(usersListFeature: Feature<UsersListFeature.State, UsersLi
             label = { Text(text = "Query") },
             keyboardActions = KeyboardActions(onSearch = {
                 usersListFeature.onNewMessage(
-                    UsersListFeature.Message.Init(forceUpdate = true, UsersQuery(userName = queryText))
+                    UsersListFeature.Message.Init(
+                        forceUpdate = true,
+                        UsersQuery(userName = queryText)
+                    )
                 )
                 focusManager.clearFocus()
             }),
@@ -133,7 +133,7 @@ private fun MainScreen(usersListFeature: Feature<UsersListFeature.State, UsersLi
                     LoadingState()
 
                 is UsersListFeature.State.Data ->
-                    DataState(state = state) {
+                    DataState(state = state, onDetails = { viewModel.openDetails(it) }) {
                         usersListFeature.onNewMessage(UsersListFeature.Message.LoadNextPage)
                     }
 
@@ -143,6 +143,31 @@ private fun MainScreen(usersListFeature: Feature<UsersListFeature.State, UsersLi
         }
     }
 
+}
+
+
+@Composable
+fun DetailsContent(
+    userDetails: User
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                modifier = Modifier
+                    .height(80.dp)
+                    .width(80.dp),
+                painter = rememberImagePainter(userDetails.avatarUrl),
+                contentDescription = "avatar :${userDetails.gravatarId}"
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "User nickname: ${userDetails.login}")
+        }
+    }
 }
 
 @Composable
@@ -156,13 +181,18 @@ fun ErrorState() {
 }
 
 @Composable
-fun DataState(state: UsersListFeature.State.Data, onLoadMore: () -> Unit) {
+fun DataState(
+    state: UsersListFeature.State.Data, onDetails: (User) -> Unit,
+    onLoadMore: () -> Unit
+) {
     val listState = rememberLazyListState()
     LazyColumn(state = listState, modifier = Modifier.fillMaxWidth()) {
         itemsIndexed(state.users, key = { _, item -> item.id }) { index, item ->
             Text(
                 text = item.login,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier
+                    .padding(16.dp)
+                    .clickable { onDetails(item) }
             )
 
             if (index + 3 > state.users.size) {

@@ -39,6 +39,8 @@ android-compose-animation = { module = "androidx.compose.animation:animation", v
 android-compose-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidCompose" }
 #android-compose-themeAdapter = { module = "com.google.android.material:compose-theme-adapter", version.ref = "androidCompose" }
 android-compose-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.4.0" }
+android-compose-koil = { module = "io.coil-kt:coil-compose", version = "1.4.0"}
+android-compose-brick = { module = "io.github.alphicc:brick", version = "1.0.0-beta03"}
 
 android-test-junit = { module = "junit:junit", version = "4.13.2" }
 android-test-runner = { module = "androidx.test:runner", version = "1.4.0" }
@@ -51,5 +53,7 @@ android-compose = [
     'android-compose-activity', 'android-compose-material', 'android-compose-animation',
     'android-compose-tooling',
 #    'android-compose-themeAdapter',
-    'android-compose-viewmodel'
+    'android-compose-viewmodel',
+    'android-compose-brick',
+    'android-compose-koil'
 ]
