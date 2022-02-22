@@ -28,7 +28,7 @@ import ru.nobird.app.presentation.redux.feature.Feature
 @Composable
 fun MainScreen(
     usersListFeature: Feature<UsersListFeature.State, UsersListFeature.Message, UsersListFeature.Action>,
-    userAction: () -> Unit
+    userAction: (userName: String) -> Unit
 ) {
     var queryText by remember { mutableStateOf("test") }
     var featureState by remember { mutableStateOf(usersListFeature.state) }
@@ -87,7 +87,7 @@ fun MainScreen(
 @Composable
 fun DataState(
     state: UsersListFeature.State.Data,
-    navigate: () -> Unit,
+    navigate: (userName: String) -> Unit,
     onLoadMore: () -> Unit
 ) {
     val listState = rememberLazyListState()
@@ -100,7 +100,7 @@ fun DataState(
                 text = item.login,
                 modifier = Modifier
                     .padding(16.dp)
-                    .clickable { navigate() }
+                    .clickable { navigate(item.login) }
             )
 
             if (index + 3 > state.users.size) {

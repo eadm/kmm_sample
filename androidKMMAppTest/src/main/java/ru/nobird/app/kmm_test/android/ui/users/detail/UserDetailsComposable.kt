@@ -14,6 +14,7 @@ import ru.nobird.app.presentation.redux.feature.Feature
 
 @Composable
 fun UserDetailsComposable(
+    userName: String,
     userFeature: Feature<
         UserDetailsFeature.State,
         UserDetailsFeature.Message,
@@ -32,7 +33,7 @@ fun UserDetailsComposable(
         }
 
     userFeature.onNewMessage(
-        UserDetailsFeature.Message.Init(forceUpdate = true, userName = "eadm")
+        UserDetailsFeature.Message.Init(forceUpdate = true, userName = userName)
     )
     Scaffold(
         topBar = flatTopBar(

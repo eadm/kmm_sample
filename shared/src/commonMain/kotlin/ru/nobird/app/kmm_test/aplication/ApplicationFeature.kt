@@ -1,9 +1,9 @@
 package ru.nobird.app.kmm_test.aplication
 
 sealed interface ApplicationFeature {
-    enum class Feature {
-        USERS_LIST,
-        USERS_DETAIL
+    sealed class Feature {
+        object UserList : Feature()
+        data class UserDetails(val data: String) : Feature()
     }
 
     sealed interface State {

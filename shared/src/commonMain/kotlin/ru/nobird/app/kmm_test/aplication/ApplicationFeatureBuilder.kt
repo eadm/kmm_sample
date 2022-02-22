@@ -11,8 +11,8 @@ object ApplicationFeatureBuilder {
     fun build(): Feature<State, Message, Action> =
         ReduxFeature(
             State.Screen(
-                feature = ApplicationFeature.Feature.USERS_LIST,
-                stack = ArrayDeque(listOf(ApplicationFeature.Feature.USERS_LIST))
+                feature = ApplicationFeature.Feature.UserList,
+                stack = ArrayDeque(listOf(ApplicationFeature.Feature.UserList))
             ),
             ApplicationReducer()
         ).wrapWithActionDispatcher(ApplicationDispatcher())
