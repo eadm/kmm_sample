@@ -1,16 +1,13 @@
 package ru.nobird.app.kmm_test.android
 
 import android.os.Bundle
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.progressSemantics
@@ -19,13 +16,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -35,65 +26,65 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.coroutineScope
 import ru.nobird.app.core.model.Cancellable
-import ru.nobird.app.kmm_test.android.databinding.ActivityMainBinding
+import ru.nobird.app.kmm_test.data.model.User
 import ru.nobird.app.kmm_test.data.model.UsersQuery
 import ru.nobird.app.kmm_test.user_list.UsersListFeature
-import ru.nobird.app.kmm_test.user_list.UsersListFeatureBuilder
-import ru.nobird.app.presentation.redux.feature.Feature
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var viewBinding: ActivityMainBinding
-    private val usersAdapter = UsersAdapter()
+    private val viewModel: NavViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val usersListFeature = UsersListFeatureBuilder.build()
-
         setContent {
-            MainScreen(usersListFeature)
+            MainContent(Screens.Main, viewModel)
         }
-
-//        viewBinding = ActivityMainBinding.inflate(layoutInflater)
-//        setContentView(viewBinding.root)
-//
-//
-//        usersListFeature.addStateListener(this::setState)
-//
-//        viewBinding.button.setOnClickListener {
-//            usersListFeature.onNewMessage(
-//                UsersListFeature.Message.Init(
-//                    forceUpdate = true,
-//                    usersQuery = UsersQuery(
-//                        userName = viewBinding.userName.text.toString()
-//                    )
-//                )
-//            )
-//        }
-//
-//        setState(usersListFeature.state)
-//        viewBinding.usersList.adapter = usersAdapter
     }
+}
 
-    private fun setState(state: UsersListFeature.State) {
-        // TODO: 7/21/21 change to paged list
-        usersAdapter.updateList((state as? UsersListFeature.State.Data)?.users)
+@Composable
+fun Details(user: User) {
+    Text(text = user.login)
+}
+
+@Composable
+fun MainContent(startScreen: Screens, navViewModel: NavViewModel) {
+    val onNavigate: (Screens) -> Unit = {
+        navViewModel.push(it)
+    }
+    if (navViewModel.backStack.isNullOrEmpty()) {
+        LaunchedEffect(navViewModel) {
+            coroutineScope {
+                onNavigate(startScreen)
+            }
+        }
+    }
+    Box(modifier = Modifier.fillMaxSize()) {
+        when (val screen = navViewModel.current.value) {
+            is Screens.Main -> MainScreen {
+                onNavigate(it)
+            }
+            is Screens.Details -> Details(screen.user)
+            else -> {}
+        }
+    }
+    BackHandler(navViewModel.backEnabled()) {
+        navViewModel.pop()
     }
 }
 
 
 @Composable
-private fun MainScreen(usersListFeature: Feature<UsersListFeature.State, UsersListFeature.Message, UsersListFeature.Action>) {
+private fun MainScreen(onDetails: (Screens.Details) -> Unit) {
+    val viewModel: MainViewModel = viewModel()
+    val usersListFeature = viewModel.feature
     var queryText by remember { mutableStateOf("test") }
-    var featureState by remember { mutableStateOf(usersListFeature.state) }
+    val featureState by usersListFeature.observeState()
 
     val focusManager = LocalFocusManager.current
-
-    LocalLifecycleOwner.current.lifecycle
-        .addCancellable {
-            usersListFeature.addStateListener { featureState = it }
-        }
 
     LocalLifecycleOwner.current.lifecycle
         .addCancellable {
@@ -116,7 +107,10 @@ private fun MainScreen(usersListFeature: Feature<UsersListFeature.State, UsersLi
             label = { Text(text = "Query") },
             keyboardActions = KeyboardActions(onSearch = {
                 usersListFeature.onNewMessage(
-                    UsersListFeature.Message.Init(forceUpdate = true, UsersQuery(userName = queryText))
+                    UsersListFeature.Message.Init(
+                        forceUpdate = true,
+                        UsersQuery(userName = queryText)
+                    )
                 )
                 focusManager.clearFocus()
             }),
@@ -133,7 +127,7 @@ private fun MainScreen(usersListFeature: Feature<UsersListFeature.State, UsersLi
                     LoadingState()
 
                 is UsersListFeature.State.Data ->
-                    DataState(state = state) {
+                    DataState(state = state, onDetails) {
                         usersListFeature.onNewMessage(UsersListFeature.Message.LoadNextPage)
                     }
 
@@ -156,13 +150,19 @@ fun ErrorState() {
 }
 
 @Composable
-fun DataState(state: UsersListFeature.State.Data, onLoadMore: () -> Unit) {
+fun DataState(
+    state: UsersListFeature.State.Data,
+    onDetails: (Screens.Details) -> Unit,
+    onLoadMore: () -> Unit
+) {
     val listState = rememberLazyListState()
     LazyColumn(state = listState, modifier = Modifier.fillMaxWidth()) {
         itemsIndexed(state.users, key = { _, item -> item.id }) { index, item ->
             Text(
                 text = item.login,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier
+                    .padding(16.dp)
+                    .clickable { onDetails.invoke(Screens.Details(item)) }
             )
 
             if (index + 3 > state.users.size) {
