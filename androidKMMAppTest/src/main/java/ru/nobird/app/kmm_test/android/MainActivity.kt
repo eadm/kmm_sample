@@ -1,10 +1,11 @@
 package ru.nobird.app.kmm_test.android
 
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,6 +18,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -28,17 +30,19 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.coroutineScope
+import kotlinx.serialization.ExperimentalSerializationApi
 import ru.nobird.app.core.model.Cancellable
 import ru.nobird.app.kmm_test.data.model.User
 import ru.nobird.app.kmm_test.data.model.UsersQuery
 import ru.nobird.app.kmm_test.user_list.UsersListFeature
 
-class MainActivity : AppCompatActivity() {
+@ExperimentalSerializationApi
+class MainActivity : ComponentActivity() {
     private val viewModel: NavViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Log.d("TAG", "onCreate: $savedInstanceState")
         setContent {
             MainContent(Screens.Main, viewModel)
         }
@@ -50,6 +54,7 @@ fun Details(user: User) {
     Text(text = user.login)
 }
 
+@ExperimentalSerializationApi
 @Composable
 fun MainContent(startScreen: Screens, navViewModel: NavViewModel) {
     val onNavigate: (Screens) -> Unit = {
@@ -81,7 +86,7 @@ fun MainContent(startScreen: Screens, navViewModel: NavViewModel) {
 private fun MainScreen(onDetails: (Screens.Details) -> Unit) {
     val viewModel: MainViewModel = viewModel()
     val usersListFeature = viewModel.feature
-    var queryText by remember { mutableStateOf("test") }
+    var queryText by rememberSaveable { mutableStateOf("test") }
     val featureState by usersListFeature.observeState()
 
     val focusManager = LocalFocusManager.current

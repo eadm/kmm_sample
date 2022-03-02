@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    kotlin("plugin.serialization")
     kotlin("android")
 }
 
@@ -14,6 +15,7 @@ dependencies {
 
     implementation(libs.bundles.ktor.common)
     implementation(libs.bundles.android.compose)
+    implementation("com.chrynan.parcelable:parcelable-core:0.4.1")
 
     testImplementation(libs.bundles.android.test)
 }

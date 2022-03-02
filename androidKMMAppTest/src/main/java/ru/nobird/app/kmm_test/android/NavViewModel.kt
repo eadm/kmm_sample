@@ -1,11 +1,28 @@
 package ru.nobird.app.kmm_test.android
 
+import android.os.Bundle
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.chrynan.parcelable.core.Parcelable
+import com.chrynan.parcelable.core.decodeFromBundle
+import com.chrynan.parcelable.core.encodeToBundle
+import kotlinx.serialization.ExperimentalSerializationApi
 
-class NavViewModel : ViewModel() {
-    var backStack = mutableStateListOf<Screens>()
+@ExperimentalSerializationApi
+class NavViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
+    companion object {
+        private const val NAV_KEY = "nav_key"
+    }
+    private val parcelable: Parcelable = Parcelable.Default
+
+    var backStack by SavableComposeState<SnapshotStateList<Bundle>>(
+        savedStateHandle,
+        NAV_KEY,
+        mutableStateListOf()
+    )
         private set
 
     val current = derivedStateOf {
@@ -13,7 +30,7 @@ class NavViewModel : ViewModel() {
     }
 
     fun push(screen: Screens) {
-        backStack.add(screen)
+        backStack.add(parcelable.encodeToBundle(screen))
     }
 
     fun pop() {
@@ -21,8 +38,7 @@ class NavViewModel : ViewModel() {
     }
 
     private fun top(): Screens? =
-       backStack.lastOrNull()
-
+        backStack.lastOrNull()?.let { parcelable.decodeFromBundle(it) }
 
     fun backEnabled(): Boolean = backStack.size > 1
 
