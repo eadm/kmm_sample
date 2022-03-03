@@ -60,7 +60,7 @@ fun MainContent(startScreen: Screens, navViewModel: NavViewModel) {
     val onNavigate: (Screens) -> Unit = {
         navViewModel.push(it)
     }
-    if (navViewModel.backStack.isNullOrEmpty()) {
+    if (navViewModel.bs.isNullOrEmpty()) {
         LaunchedEffect(navViewModel) {
             coroutineScope {
                 onNavigate(startScreen)
