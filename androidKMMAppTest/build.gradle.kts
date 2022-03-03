@@ -14,6 +14,7 @@ dependencies {
 
     implementation(libs.bundles.ktor.common)
     implementation(libs.bundles.android.compose)
+    implementation("com.google.accompanist:accompanist-appcompat-theme:0.16.0")
 
     testImplementation(libs.bundles.android.test)
 }

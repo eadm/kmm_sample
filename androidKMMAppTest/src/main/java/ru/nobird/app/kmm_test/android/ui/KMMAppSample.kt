@@ -13,29 +13,24 @@ import ru.nobird.app.kmm_test.aplication.ApplicationFeature.State
 import ru.nobird.app.presentation.redux.feature.Feature
 
 @Composable
-fun KMMAppSample(feature: Feature<State, Message, Action>) {
-    var featureState by remember { mutableStateOf(feature.state) }
-
-    LocalLifecycleOwner.current.lifecycle
-        .addCancellable {
-            feature.addStateListener { featureState = it }
-            feature
+fun KMMAppSample(
+    state: State,
+    message: (Message) -> Unit
+) {
+    when (val screen = state.stack.first()) {
+        ApplicationFeature.Feature.UserList -> {
+            MainScreen(usersListFeature = UsersListFeatureBuilder.build()) { userName ->
+                //click on user
+                message(Message.Navigate(ApplicationFeature.Feature.UserDetails(userName)))
+            }
         }
-
-    when (val state = featureState) {
-        is State.Screen ->
-            when(state.feature) {
-                ApplicationFeature.Feature.UserList -> {
-                    MainScreen(usersListFeature = UsersListFeatureBuilder.build()) { userName ->
-                        //click on user
-                        feature.onNewMessage(Message.Navigate(ApplicationFeature.Feature.UserDetails(userName)))
-                    }
-                }
-                is ApplicationFeature.Feature.UserDetails ->
-                    UserDetailsComposable(userName = (state.feature as ApplicationFeature.Feature.UserDetails).data, userFeature = UserDetailsFeatureBuilder.build()) {
-                        //back pressed
-                        feature.onNewMessage(Message.BackPressed)
-                    }
+        is ApplicationFeature.Feature.UserDetails ->
+            UserDetailsComposable(
+                userName = screen.data,
+                userFeature = UserDetailsFeatureBuilder.build()
+            ) {
+                //back pressed
+                message(Message.BackPressed)
             }
     }
 }
