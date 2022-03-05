@@ -1,6 +1,5 @@
 package ru.nobird.app.kmm_test.android
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -20,7 +19,6 @@ class SavableComposeState<T>(
         thisRef: Any?,
         property: KProperty<*>
     ): T {
-        Log.d("TAG", "getValue: $_state")
         return _state
     }
 
@@ -30,7 +28,6 @@ class SavableComposeState<T>(
         value: T
     ) {
         _state = value
-        Log.d("TAG", "setValue: $value")
         savedStateHandle.set(key, value)
     }
 }

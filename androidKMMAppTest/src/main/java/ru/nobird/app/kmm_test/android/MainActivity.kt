@@ -1,7 +1,6 @@
 package ru.nobird.app.kmm_test.android
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -14,9 +13,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -42,7 +39,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("TAG", "onCreate: $savedInstanceState")
         setContent {
             MainContent(Screens.Main, viewModel)
         }
