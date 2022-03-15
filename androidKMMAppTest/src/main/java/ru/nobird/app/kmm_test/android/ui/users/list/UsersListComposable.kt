@@ -12,6 +12,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -30,7 +31,7 @@ fun MainScreen(
     usersListFeature: Feature<UsersListFeature.State, UsersListFeature.Message, UsersListFeature.Action>,
     userAction: (userName: String) -> Unit
 ) {
-    var queryText by remember { mutableStateOf("test") }
+    var queryText by rememberSaveable { mutableStateOf("test") }
     var featureState by remember { mutableStateOf(usersListFeature.state) }
 
     val focusManager = LocalFocusManager.current
@@ -93,7 +94,7 @@ fun DataState(
     val listState = rememberLazyListState()
     LazyColumn(state = listState, modifier = Modifier
         .fillMaxWidth()
-        .clickable {  }
+        .clickable { }
     ) {
         itemsIndexed(state.users, key = { _, item -> item.id }) { index, item ->
             Text(
