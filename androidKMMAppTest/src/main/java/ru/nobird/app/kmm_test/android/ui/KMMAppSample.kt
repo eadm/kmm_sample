@@ -30,7 +30,7 @@ fun KMMAppSample(
                     message(Message.UserDetailsMessage(it))
                 },
                 onBackClicked = {
-                    message(Message.BackPressed)
+                    message(Message.OnUserListScreenSwitch)
                 },
             )
     }

@@ -12,6 +12,8 @@ import ru.nobird.app.kmm_test.android.ui.*
 import ru.nobird.app.kmm_test.users.detail.UserDetailsFeature
 import ru.nobird.app.presentation.redux.feature.Feature
 
+object Counter { var count = 0 }
+
 @Composable
 fun UserDetailsComposable(
     userName: String,
@@ -21,21 +23,7 @@ fun UserDetailsComposable(
 ) {
 
     BackPressHandler(onBackPressed = onBackClicked)
-
-//    var featureState by remember { mutableStateOf(userFeature.state) }
-
-//    LocalLifecycleOwner.current.lifecycle
-//        .addCancellable {
-//            userFeature.addStateListener { featureState = it }
-//            userFeature
-//        }
-
-    message(
-        UserDetailsFeature.Message.Init(
-            forceUpdate = true,
-            userName = userName
-        )
-    )
+    Counter.count = 1
     Scaffold(
         topBar = flatTopBar(
             title = "User Detail",
@@ -50,7 +38,15 @@ fun UserDetailsComposable(
                 contentAlignment = Alignment.Center
             ) {
                 when (state) {
-                    is UserDetailsFeature.State.Idle, is UserDetailsFeature.State.Loading ->
+                    is UserDetailsFeature.State.Idle ->
+                        message(
+                            UserDetailsFeature.Message.Init(
+                                forceUpdate = true,
+                                userName = userName
+                            )
+                        )
+
+                    is UserDetailsFeature.State.Loading ->
                         LoadingState()
 
                     is UserDetailsFeature.State.Data ->

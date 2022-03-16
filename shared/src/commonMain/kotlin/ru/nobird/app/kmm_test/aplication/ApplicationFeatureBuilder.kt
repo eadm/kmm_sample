@@ -17,6 +17,7 @@ import ru.nobird.app.presentation.redux.dispatcher.transform
 import ru.nobird.app.presentation.redux.dispatcher.wrapWithActionDispatcher
 
 object ApplicationFeatureBuilder {
+    private val actionDispatcherOptions = ActionDispatcherOptions()
     fun build(): Feature<State, Message, Action> =
         ReduxFeature(
             State(
@@ -32,11 +33,11 @@ object ApplicationFeatureBuilder {
             )
         )
             .wrapWithActionDispatcher(ApplicationDispatcher())
-            .wrapWithActionDispatcher(UsersListDispatcher(ActionDispatcherOptions()).transform(
+            .wrapWithActionDispatcher(UsersListDispatcher(actionDispatcherOptions).transform(
                 transformAction = { it.safeCast<Action.UserListAction>()?.action },
                 transformMessage = Message::UserListMessage
             ))
-            .wrapWithActionDispatcher(UserDetailsDispatcher(ActionDispatcherOptions()).transform(
+            .wrapWithActionDispatcher(UserDetailsDispatcher(actionDispatcherOptions).transform(
                 transformAction = { it.safeCast<Action.UserDetailsAction>()?.action },
                 transformMessage = Message::UserDetailsMessage
             ))
