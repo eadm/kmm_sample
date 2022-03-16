@@ -22,7 +22,7 @@ object ApplicationFeatureBuilder {
         ReduxFeature(
             State(
                 screens = listOf(
-                    State.ScreenState.UserListScreen(UsersListFeature.State.Idle),
+                    State.ScreenState.UserListScreen(UsersListFeature.State.Idle()),
                     State.ScreenState.UserDetailsScreen(UserDetailsFeature.State.Idle)
                 ),
                 currentScreenPos = 0

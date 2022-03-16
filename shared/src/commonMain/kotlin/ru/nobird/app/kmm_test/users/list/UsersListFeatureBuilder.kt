@@ -10,6 +10,6 @@ import ru.nobird.app.presentation.redux.feature.ReduxFeature
 
 object UsersListFeatureBuilder {
     fun build(): Feature<State, Message, Action> =
-        ReduxFeature(State.Idle, UsersListReducer())
+        ReduxFeature(State.Idle(), UsersListReducer())
             .wrapWithActionDispatcher(UsersListDispatcher(ActionDispatcherOptions()))
 }

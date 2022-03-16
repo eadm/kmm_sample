@@ -32,30 +32,23 @@ fun UsersListComposable(
     message: (UsersListFeature.Message) -> Unit,
     navigate: () -> Unit
 ) {
-    var queryText by rememberSaveable { mutableStateOf("test") }
-//    var featureState by remember { mutableStateOf(usersListFeature.state) }
-
     val focusManager = LocalFocusManager.current
-
-//    LocalLifecycleOwner.current.lifecycle
-//        .addCancellable {
-//            usersListFeature.addStateListener { featureState = it }
-//            usersListFeature
-//        }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TextField(
-            value = queryText,
-            onValueChange = { queryText = it },
+            value = state.inputData.userName,
+            onValueChange = {
+                message(UsersListFeature.Message.OnUserNameInput(it))
+            },
             label = { Text(text = "Query") },
             keyboardActions = KeyboardActions(onSearch = {
                 message(
                     UsersListFeature.Message.Init(
                         forceUpdate = true,
-                        UsersQuery(userName = queryText)
+                        UsersQuery(userName = state.inputData.userName)
                     )
                 )
                 focusManager.clearFocus()

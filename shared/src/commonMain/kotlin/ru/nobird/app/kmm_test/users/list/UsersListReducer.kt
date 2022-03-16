@@ -15,7 +15,7 @@ class UsersListReducer : StateReducer<State, Message, Action> {
                 if (state is State.Idle ||
                     (message.forceUpdate && (state is State.Data || state is State.NetworkError))
                 ) {
-                    State.Loading to setOf(Action.FetchUsers(message.usersQuery))
+                    State.Loading(state.inputData) to setOf(Action.FetchUsers(message.usersQuery))
                 } else {
                     null
                 }
@@ -39,9 +39,16 @@ class UsersListReducer : StateReducer<State, Message, Action> {
             is Message.UsersLoaded.Success ->
                 if (state is State.Data) {
                     val users = state.users.plus(message.users)
-                    state.copy(users = users, isLoading = false) to emptySet()
+                    state.copy(
+                        users = users,
+                        isLoading = false
+                    ) to emptySet()
                 } else {
-                    State.Data(users = message.users, isLoading = false) to emptySet()
+                    State.Data(
+                        users = message.users,
+                        isLoading = false,
+                        inputData = state.inputData
+                    ) to emptySet()
                 }
 
             is Message.UsersLoaded.Error ->
@@ -51,5 +58,13 @@ class UsersListReducer : StateReducer<State, Message, Action> {
                     else -> null
                 }
 
+            is Message.OnUserNameInput ->
+                when (state) {
+                    is State.Idle ->
+                        state.copy(inputData = State.InputData(userName = message.userName)) to setOf()
+                    is State.Data ->
+                        state.copy(inputData = State.InputData(userName = message.userName)) to setOf()
+                    else -> null
+                }
         } ?: state to emptySet()
 }
