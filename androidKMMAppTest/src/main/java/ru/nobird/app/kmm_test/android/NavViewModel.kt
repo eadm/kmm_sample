@@ -18,13 +18,11 @@ class NavViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
     }
     private val parcelable: Parcelable = Parcelable.Default
 
-
     private var backStack by SavableComposeState<ArrayList<Bundle>>(
         savedStateHandle,
         NAV_KEY,
         arrayListOf()
     )
-        private set
 
     val bs = backStack.toMutableStateList()
 
