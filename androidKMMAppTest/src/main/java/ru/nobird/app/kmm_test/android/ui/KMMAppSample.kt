@@ -1,16 +1,10 @@
 package ru.nobird.app.kmm_test.android.ui
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import ru.nobird.app.kmm_test.android.ui.users.detail.UserDetailsComposable
-import ru.nobird.app.kmm_test.android.ui.users.list.MainScreen
-import ru.nobird.app.kmm_test.aplication.ApplicationFeature
-import ru.nobird.app.kmm_test.users.detail.UserDetailsFeatureBuilder
-import ru.nobird.app.kmm_test.users.list.UsersListFeatureBuilder
-import ru.nobird.app.kmm_test.aplication.ApplicationFeature.Action
+import ru.nobird.app.kmm_test.android.ui.users.list.UsersListComposable
 import ru.nobird.app.kmm_test.aplication.ApplicationFeature.Message
 import ru.nobird.app.kmm_test.aplication.ApplicationFeature.State
-import ru.nobird.app.presentation.redux.feature.Feature
 
 @Composable
 fun KMMAppSample(
@@ -19,10 +13,13 @@ fun KMMAppSample(
 ) {
     when (val screen = state.currentScreen) {
         is State.ScreenState.UserListScreen ->
-            MainScreen(
+            UsersListComposable(
                 state = screen.state,
                 message = {
                     message(Message.UserListMessage(it))
+                },
+                navigate = {
+                    message(Message.OnUserDetailsScreenSwitch)
                 }
             )
         is State.ScreenState.UserDetailsScreen ->

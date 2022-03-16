@@ -27,9 +27,10 @@ import ru.nobird.app.kmm_test.users.list.UsersListFeature
 import ru.nobird.app.presentation.redux.feature.Feature
 
 @Composable
-fun MainScreen(
+fun UsersListComposable(
     state: UsersListFeature.State,
-    message: (UsersListFeature.Message) -> Unit
+    message: (UsersListFeature.Message) -> Unit,
+    navigate: () -> Unit
 ) {
     var queryText by rememberSaveable { mutableStateOf("test") }
 //    var featureState by remember { mutableStateOf(usersListFeature.state) }
@@ -73,9 +74,13 @@ fun MainScreen(
                     LoadingState()
 
                 is UsersListFeature.State.Data ->
-                    DataState(state = state, message) {
-                        message(UsersListFeature.Message.LoadNextPage)
-                    }
+                    DataState(
+                        state = state,
+                        navigate = navigate,
+                        onLoadMore = {
+                            message(UsersListFeature.Message.LoadNextPage)
+                        }
+                    )
 
                 is UsersListFeature.State.NetworkError ->
                     ErrorState()
@@ -88,7 +93,7 @@ fun MainScreen(
 @Composable
 fun DataState(
     state: UsersListFeature.State.Data,
-    message: (UsersListFeature.Message) -> Unit, //todo refactor this later
+    navigate: () -> Unit,
     onLoadMore: () -> Unit
 ) {
     val listState = rememberLazyListState()
@@ -101,7 +106,7 @@ fun DataState(
                 text = item.login,
                 modifier = Modifier
                     .padding(16.dp)
-                    .clickable {  }
+                    .clickable { navigate() }
             )
 
             if (index + 3 > state.users.size) {
