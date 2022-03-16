@@ -15,25 +15,26 @@ import ru.nobird.app.presentation.redux.feature.Feature
 @Composable
 fun UserDetailsComposable(
     userName: String,
-    userFeature: Feature<
-        UserDetailsFeature.State,
-        UserDetailsFeature.Message,
-        UserDetailsFeature.Action>,
+    state: UserDetailsFeature.State,
+    message: (UserDetailsFeature.Message) -> Unit,
     onBackClicked: () -> Unit
 ) {
 
     BackPressHandler(onBackPressed = onBackClicked)
 
-    var featureState by remember { mutableStateOf(userFeature.state) }
+//    var featureState by remember { mutableStateOf(userFeature.state) }
 
-    LocalLifecycleOwner.current.lifecycle
-        .addCancellable {
-            userFeature.addStateListener { featureState = it }
-            userFeature
-        }
+//    LocalLifecycleOwner.current.lifecycle
+//        .addCancellable {
+//            userFeature.addStateListener { featureState = it }
+//            userFeature
+//        }
 
-    userFeature.onNewMessage(
-        UserDetailsFeature.Message.Init(forceUpdate = true, userName = userName)
+    message(
+        UserDetailsFeature.Message.Init(
+            forceUpdate = true,
+            userName = userName
+        )
     )
     Scaffold(
         topBar = flatTopBar(
@@ -48,7 +49,7 @@ fun UserDetailsComposable(
             Box(
                 contentAlignment = Alignment.Center
             ) {
-                when (val state = featureState) {
+                when (state) {
                     is UserDetailsFeature.State.Idle, is UserDetailsFeature.State.Loading ->
                         LoadingState()
 

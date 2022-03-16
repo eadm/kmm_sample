@@ -28,19 +28,19 @@ import ru.nobird.app.presentation.redux.feature.Feature
 
 @Composable
 fun MainScreen(
-    usersListFeature: Feature<UsersListFeature.State, UsersListFeature.Message, UsersListFeature.Action>,
-    userAction: (userName: String) -> Unit
+    state: UsersListFeature.State,
+    message: (UsersListFeature.Message) -> Unit
 ) {
     var queryText by rememberSaveable { mutableStateOf("test") }
-    var featureState by remember { mutableStateOf(usersListFeature.state) }
+//    var featureState by remember { mutableStateOf(usersListFeature.state) }
 
     val focusManager = LocalFocusManager.current
 
-    LocalLifecycleOwner.current.lifecycle
-        .addCancellable {
-            usersListFeature.addStateListener { featureState = it }
-            usersListFeature
-        }
+//    LocalLifecycleOwner.current.lifecycle
+//        .addCancellable {
+//            usersListFeature.addStateListener { featureState = it }
+//            usersListFeature
+//        }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -51,7 +51,7 @@ fun MainScreen(
             onValueChange = { queryText = it },
             label = { Text(text = "Query") },
             keyboardActions = KeyboardActions(onSearch = {
-                usersListFeature.onNewMessage(
+                message(
                     UsersListFeature.Message.Init(
                         forceUpdate = true,
                         UsersQuery(userName = queryText)
@@ -68,13 +68,13 @@ fun MainScreen(
         Box(
             contentAlignment = Alignment.Center
         ) {
-            when (val state = featureState) {
+            when (state) {
                 is UsersListFeature.State.Idle, is UsersListFeature.State.Loading ->
                     LoadingState()
 
                 is UsersListFeature.State.Data ->
-                    DataState(state = state, userAction) {
-                        usersListFeature.onNewMessage(UsersListFeature.Message.LoadNextPage)
+                    DataState(state = state, message) {
+                        message(UsersListFeature.Message.LoadNextPage)
                     }
 
                 is UsersListFeature.State.NetworkError ->
@@ -88,7 +88,7 @@ fun MainScreen(
 @Composable
 fun DataState(
     state: UsersListFeature.State.Data,
-    navigate: (userName: String) -> Unit,
+    message: (UsersListFeature.Message) -> Unit, //todo refactor this later
     onLoadMore: () -> Unit
 ) {
     val listState = rememberLazyListState()
@@ -101,7 +101,7 @@ fun DataState(
                 text = item.login,
                 modifier = Modifier
                     .padding(16.dp)
-                    .clickable { navigate(item.login) }
+                    .clickable {  }
             )
 
             if (index + 3 > state.users.size) {

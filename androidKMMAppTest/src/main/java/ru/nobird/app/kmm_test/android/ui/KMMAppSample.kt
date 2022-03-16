@@ -17,20 +17,24 @@ fun KMMAppSample(
     state: State,
     message: (Message) -> Unit
 ) {
-    when (val screen = state.stack.first()) {
-        ApplicationFeature.Feature.UserList -> {
-            MainScreen(usersListFeature = UsersListFeatureBuilder.build()) { userName ->
-                //click on user
-                message(Message.Navigate(ApplicationFeature.Feature.UserDetails(userName)))
-            }
-        }
-        is ApplicationFeature.Feature.UserDetails ->
+    when (val screen = state.currentScreen) {
+        is State.ScreenState.UserListScreen ->
+            MainScreen(
+                state = screen.state,
+                message = {
+                    message(Message.UserListMessage(it))
+                }
+            )
+        is State.ScreenState.UserDetailsScreen ->
             UserDetailsComposable(
-                userName = screen.data,
-                userFeature = UserDetailsFeatureBuilder.build()
-            ) {
-                //back pressed
-                message(Message.BackPressed)
-            }
+                userName = "eadm",
+                state = screen.state,
+                message = {
+                    message(Message.UserDetailsMessage(it))
+                },
+                onBackClicked = {
+                    message(Message.BackPressed)
+                },
+            )
     }
 }
