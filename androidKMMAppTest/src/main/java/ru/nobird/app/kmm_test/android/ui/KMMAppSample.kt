@@ -19,12 +19,12 @@ fun KMMAppSample(
                     message(Message.UserListMessage(it))
                 },
                 navigate = {
-                    message(Message.OnUserDetailsScreenSwitch)
+                    message(Message.OnUserDetailsScreenSwitch(screen.state.inputData.userName))
                 }
             )
         is State.ScreenState.UserDetailsScreen ->
             UserDetailsComposable(
-                userName = "eadm",
+                userName = state.username,
                 state = screen.state,
                 message = {
                     message(Message.UserDetailsMessage(it))

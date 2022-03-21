@@ -20,8 +20,8 @@ class ApplicationReducer(
                     is Message.UserListMessage ->
                         reduceUserList(state.currentScreen, message.message, state)
 
-                    Message.OnUserDetailsScreenSwitch ->
-                        state.copy(currentScreenPos = 1) to setOf()
+                    is Message.OnUserDetailsScreenSwitch ->
+                        state.copy(currentScreenPos = 1, username = message.userName) to setOf()
 
                     Message.BackPressed ->
                         state to setOf(Action.Finish)

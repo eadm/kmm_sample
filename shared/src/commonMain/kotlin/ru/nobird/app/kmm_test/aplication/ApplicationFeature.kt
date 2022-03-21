@@ -6,7 +6,8 @@ import ru.nobird.app.kmm_test.users.list.UsersListFeature
 sealed interface ApplicationFeature {
     data class State(
         val screens: List<ScreenState>,
-        val currentScreenPos: Int
+        val currentScreenPos: Int,
+        val username: String = "" //todo fix it later
     ) {
         val currentScreen = screens[currentScreenPos]
         fun <T : ScreenState> changeCurrentScreen(block: T.() -> T): State {
@@ -34,7 +35,7 @@ sealed interface ApplicationFeature {
         data class UserDetailsMessage(val message: UserDetailsFeature.Message) : Message
 
         object OnUserListScreenSwitch : Message
-        object OnUserDetailsScreenSwitch : Message
+        data class OnUserDetailsScreenSwitch(val userName: String) : Message
 
         object BackPressed : Message
     }
