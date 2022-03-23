@@ -9,4 +9,6 @@ sealed class Screens {
     object Main: Screens()
     @Serializable
     data class Details(val user: User): Screens()
+    @Serializable
+    data class Web(val url: String): Screens()
 }

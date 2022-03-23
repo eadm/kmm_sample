@@ -1,6 +1,10 @@
 package ru.nobird.app.kmm_test.android
 
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -15,6 +19,9 @@ import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +35,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -53,14 +61,30 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Details(user: User) {
+fun Details(user: User, openUrl: (Screens.Web) -> Unit, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(text = "User details")
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
+                    }
                 }
             )
+        },
+        floatingActionButton = {
+            IconButton(
+                onClick = { openUrl.invoke(Screens.Web(user.htmlUrl)) },
+                Modifier.background(MaterialTheme.colors.secondary, shape = CircleShape)
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Person,
+                    contentDescription = "Repositories"
+                )
+            }
         }
     ) {
         Column(
@@ -87,7 +111,7 @@ fun MainContent(startScreen: Screens, navViewModel: NavViewModel) {
     val onNavigate: (Screens) -> Unit = {
         navViewModel.push(it)
     }
-    if (navViewModel.bs.isNullOrEmpty()) {
+    if (navViewModel.bs.value.isNullOrEmpty()) {
         LaunchedEffect(navViewModel) {
             coroutineScope {
                 onNavigate(startScreen)
@@ -99,7 +123,14 @@ fun MainContent(startScreen: Screens, navViewModel: NavViewModel) {
             is Screens.Main -> MainScreen {
                 onNavigate(it)
             }
-            is Screens.Details -> Details(screen.user)
+            is Screens.Details -> Details(
+                screen.user,
+                openUrl = { onNavigate(it) },
+                onBack = { navViewModel.pop() }
+            )
+            is Screens.Web -> {
+                WebViewPage(url = screen.url)
+            }
             else -> {}
         }
     }
@@ -325,5 +356,32 @@ class LifecycleCancelable(
 
         cancellable?.cancel()
         cancellable = null
+    }
+}
+
+@Composable
+fun WebViewPage(url: String) {
+    var backEnabled by remember { mutableStateOf(false) }
+    var webView: WebView? = null
+    AndroidView(factory = {
+        WebView(it).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            webViewClient = object : WebViewClient() {
+                override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
+                    backEnabled = view.canGoBack()
+                }
+            }
+            loadUrl(url)
+            webView = this
+        }
+    }, update = {
+        webView = it
+    }
+    )
+    BackHandler(enabled = backEnabled) {
+        webView?.goBack()
     }
 }

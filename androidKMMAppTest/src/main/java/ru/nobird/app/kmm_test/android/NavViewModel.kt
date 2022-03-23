@@ -1,8 +1,7 @@
 package ru.nobird.app.kmm_test.android
 
 import android.os.Bundle
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.toMutableStateList
+import androidx.compose.runtime.*
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.chrynan.parcelable.core.Parcelable
@@ -16,6 +15,7 @@ class NavViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
     companion object {
         private const val NAV_KEY = "nav_key"
     }
+
     private val parcelable: Parcelable = Parcelable.Default
 
     private var backStack by SavableComposeState<ArrayList<Bundle>>(
@@ -24,25 +24,27 @@ class NavViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
         arrayListOf()
     )
 
-    val bs = backStack.toMutableStateList()
+    private val mutableBs = mutableStateOf<List<Bundle>>(backStack)
+
+    val bs: State<List<Bundle>> = mutableBs
 
     val current = derivedStateOf {
         top()
     }
 
     fun push(screen: Screens) {
-        bs.add(parcelable.encodeToBundle(screen))
-        backStack = ArrayList(bs.toList())
+        mutableBs.value += parcelable.encodeToBundle(screen)
+        backStack = ArrayList(bs.value)
     }
 
     fun pop() {
-        bs.removeLast()
-        backStack = ArrayList(bs.toList())
+        mutableBs.value = mutableBs.value.dropLast(mutableBs.value.size)
+        backStack = ArrayList(bs.value)
     }
 
     private fun top(): Screens? =
-        bs.lastOrNull()?.let { parcelable.decodeFromBundle(it) }
+        bs.value.lastOrNull()?.let { parcelable.decodeFromBundle(it) }
 
-    fun backEnabled(): Boolean = bs.size > 1
+    fun backEnabled(): Boolean = bs.value.size > 1
 
 }
