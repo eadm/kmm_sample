@@ -5,6 +5,7 @@ import ru.nobird.app.kmm_test.android.ui.users.detail.UserDetailsComposable
 import ru.nobird.app.kmm_test.android.ui.users.list.UsersListComposable
 import ru.nobird.app.kmm_test.aplication.ApplicationFeature.Message
 import ru.nobird.app.kmm_test.aplication.ApplicationFeature.State
+import ru.nobird.app.kmm_test.aplication.Screen
 
 @Composable
 fun KMMAppSample(
@@ -12,26 +13,26 @@ fun KMMAppSample(
     message: (Message) -> Unit
 ) {
     when (val screen = state.screen) {
-        is State.ScreenState.UserListScreen ->
+        is State.ScreenState.UsersListScreenState ->
             UsersListComposable(
                 state = screen.state,
                 message = {
                     message(Message.UserListMessage(it))
                 },
                 navigate = {
-                    message(Message.OnGoToClicked("UserDetailsScreen"))
+                    message(Message.OnGoToClicked(screen = it))
                 }
             )
-        is State.ScreenState.UserDetailsScreen ->
+        is State.ScreenState.UserDetailsScreenState ->
             UserDetailsComposable(
-                userName = "eadm",
+                userName = screen.userName,
                 state = screen.state,
                 message = {
                     message(Message.UserDetailsMessage(it))
                 },
                 onBackClicked = {
-                    message(Message.OnGoToClicked("UserListScreen"))
-                },
+                    message(Message.BackPressed)
+                }
             )
     }
 }

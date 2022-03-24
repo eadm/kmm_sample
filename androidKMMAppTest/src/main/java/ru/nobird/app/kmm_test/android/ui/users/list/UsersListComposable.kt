@@ -12,25 +12,24 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import ru.nobird.app.kmm_test.android.ui.ErrorState
 import ru.nobird.app.kmm_test.android.ui.LoadingState
-import ru.nobird.app.kmm_test.android.ui.addCancellable
+import ru.nobird.app.kmm_test.aplication.ApplicationFeature
+import ru.nobird.app.kmm_test.aplication.Screen
 import ru.nobird.app.kmm_test.data.users.list.model.UsersQuery
+import ru.nobird.app.kmm_test.users.detail.UserDetailsFeature
 import ru.nobird.app.kmm_test.users.list.UsersListFeature
-import ru.nobird.app.presentation.redux.feature.Feature
 
 @Composable
 fun UsersListComposable(
     state: UsersListFeature.State,
     message: (UsersListFeature.Message) -> Unit,
-    navigate: () -> Unit
+    navigate: (Screen<String>) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -86,7 +85,7 @@ fun UsersListComposable(
 @Composable
 fun DataState(
     state: UsersListFeature.State.Data,
-    navigate: () -> Unit,
+    navigate: (Screen<String>) -> Unit,
     onLoadMore: () -> Unit
 ) {
     val listState = rememberLazyListState()
@@ -99,7 +98,17 @@ fun DataState(
                 text = item.login,
                 modifier = Modifier
                     .padding(16.dp)
-                    .clickable { navigate() }
+                    .clickable {
+                        navigate(
+                            Screen(
+                                screenState = ApplicationFeature.State.ScreenState.UserDetailsScreenState(
+                                    state = UserDetailsFeature.State.Idle,
+                                    userName = item.login
+                                ),
+                                arg = item.login
+                            )
+                        )
+                    }
             )
 
             if (index + 3 > state.users.size) {

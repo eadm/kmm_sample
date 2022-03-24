@@ -12,23 +12,21 @@ sealed interface ApplicationFeature {
         val graph: NavGraph,
         val screen: ScreenState
     ) {
-        sealed class ScreenState {
-            abstract var name: String
 
-            data class UserListScreen(
+        sealed class ScreenState {
+            data class UsersListScreenState(
                 val state: UsersListFeature.State,
-                override var name: String = "UserListScreen"
             ) : ScreenState()
 
-            data class UserDetailsScreen(
+            data class UserDetailsScreenState(
                 val state: UserDetailsFeature.State,
-                override var name: String = "UserDetailsScreen"
+                val userName: String
             ) : ScreenState()
         }
     }
 
     sealed interface Message {
-        data class OnGoToClicked(val screenName: String) : Message
+        data class OnGoToClicked(val screen: Screen<String>) : Message
 
         data class UserListMessage(val message: UsersListFeature.Message) : Message
         data class UserDetailsMessage(val message: UserDetailsFeature.Message) : Message

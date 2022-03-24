@@ -7,12 +7,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import ru.nobird.app.kmm_test.android.ui.*
 import ru.nobird.app.kmm_test.users.detail.UserDetailsFeature
-import ru.nobird.app.presentation.redux.feature.Feature
-
-object Counter { var count = 0 }
 
 @Composable
 fun UserDetailsComposable(
@@ -23,7 +19,6 @@ fun UserDetailsComposable(
 ) {
 
     BackPressHandler(onBackPressed = onBackClicked)
-    Counter.count = 1
     Scaffold(
         topBar = flatTopBar(
             title = "User Detail",
@@ -51,10 +46,11 @@ fun UserDetailsComposable(
 
                     is UserDetailsFeature.State.Data ->
                         with(state.userDetails) {
-                            Text(text =
+                            Text(
+                                text =
                                 "Login: $login \n" +
-                                "Email: $email \n" +
-                                "Name:  $name"
+                                        "Email: $email \n" +
+                                        "Name:  $name"
                             )
                         }
 
