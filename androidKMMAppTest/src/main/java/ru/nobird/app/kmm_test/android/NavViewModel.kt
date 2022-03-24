@@ -8,10 +8,14 @@ import com.chrynan.parcelable.core.Parcelable
 import com.chrynan.parcelable.core.decodeFromBundle
 import com.chrynan.parcelable.core.encodeToBundle
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KSerializer
 import java.util.ArrayList
 
 @ExperimentalSerializationApi
-class NavViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
+class NavViewModel<T : Any>(
+    savedStateHandle: SavedStateHandle,
+    private val serializer: KSerializer<T>
+) : ViewModel() {
     companion object {
         private const val NAV_KEY = "nav_key"
     }
@@ -24,29 +28,30 @@ class NavViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
         arrayListOf()
     )
 
-    private val mutableBs = mutableStateOf<List<Bundle>>(backStack)
+    private val mutableBs = backStack.toMutableStateList()
 
     val isNullOrEmpty by derivedStateOf {
-        mutableBs.value.isNullOrEmpty()
+        mutableBs.isNullOrEmpty()
     }
 
     val current by derivedStateOf {
         top()
     }
 
-    fun push(screen: Screens) {
-        mutableBs.value += parcelable.encodeToBundle(screen)
-        backStack = ArrayList(mutableBs.value)
+    fun push(screen: T) {
+        mutableBs.add(parcelable.encodeToBundle(value = screen, serializer = serializer))
+        backStack = ArrayList(mutableBs.toList())
     }
 
     fun pop() {
-        mutableBs.value = mutableBs.value.dropLast(mutableBs.value.size)
-        backStack = ArrayList(mutableBs.value)
+        mutableBs.removeLast()
+        backStack = ArrayList(mutableBs.toList())
     }
 
-    private fun top(): Screens? =
-        mutableBs.value.lastOrNull()?.let { parcelable.decodeFromBundle(it) }
+    private fun top(): T? =
+        mutableBs.lastOrNull()
+            ?.let { parcelable.decodeFromBundle(it, deserializer = serializer) }
 
-    fun backEnabled(): Boolean = mutableBs.value.size > 1
+    fun backEnabled(): Boolean = mutableBs.size > 1
 
 }

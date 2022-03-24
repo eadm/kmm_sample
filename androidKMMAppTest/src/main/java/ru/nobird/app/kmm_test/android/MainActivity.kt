@@ -50,7 +50,9 @@ import ru.nobird.app.kmm_test.user_list.UsersListFeature
 
 @ExperimentalSerializationApi
 class MainActivity : ComponentActivity() {
-    private val viewModel: NavViewModel by viewModels()
+    private val viewModel: NavViewModel<Screens> by viewModels {
+        NavViewModelFactory(this, Screens.serializer())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,7 +109,7 @@ fun Details(user: User, openUrl: (Screens.Web) -> Unit, onBack: () -> Unit) {
 
 @ExperimentalSerializationApi
 @Composable
-fun MainContent(startScreen: Screens, navViewModel: NavViewModel) {
+fun MainContent(startScreen: Screens, navViewModel: NavViewModel<Screens>) {
     val onNavigate: (Screens) -> Unit = {
         navViewModel.push(it)
     }
