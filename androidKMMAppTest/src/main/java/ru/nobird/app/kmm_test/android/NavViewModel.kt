@@ -26,25 +26,27 @@ class NavViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     private val mutableBs = mutableStateOf<List<Bundle>>(backStack)
 
-    val bs: State<List<Bundle>> = mutableBs
+    val isNullOrEmpty by derivedStateOf {
+        mutableBs.value.isNullOrEmpty()
+    }
 
-    val current = derivedStateOf {
+    val current by derivedStateOf {
         top()
     }
 
     fun push(screen: Screens) {
         mutableBs.value += parcelable.encodeToBundle(screen)
-        backStack = ArrayList(bs.value)
+        backStack = ArrayList(mutableBs.value)
     }
 
     fun pop() {
         mutableBs.value = mutableBs.value.dropLast(mutableBs.value.size)
-        backStack = ArrayList(bs.value)
+        backStack = ArrayList(mutableBs.value)
     }
 
     private fun top(): Screens? =
-        bs.value.lastOrNull()?.let { parcelable.decodeFromBundle(it) }
+        mutableBs.value.lastOrNull()?.let { parcelable.decodeFromBundle(it) }
 
-    fun backEnabled(): Boolean = bs.value.size > 1
+    fun backEnabled(): Boolean = mutableBs.value.size > 1
 
 }

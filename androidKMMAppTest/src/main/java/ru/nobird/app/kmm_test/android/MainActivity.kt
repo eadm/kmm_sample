@@ -111,7 +111,7 @@ fun MainContent(startScreen: Screens, navViewModel: NavViewModel) {
     val onNavigate: (Screens) -> Unit = {
         navViewModel.push(it)
     }
-    if (navViewModel.bs.value.isNullOrEmpty()) {
+    if (navViewModel.isNullOrEmpty) {
         LaunchedEffect(navViewModel) {
             coroutineScope {
                 onNavigate(startScreen)
@@ -119,7 +119,7 @@ fun MainContent(startScreen: Screens, navViewModel: NavViewModel) {
         }
     }
     Box(modifier = Modifier.fillMaxSize()) {
-        when (val screen = navViewModel.current.value) {
+        when (val screen = navViewModel.current) {
             is Screens.Main -> MainScreen {
                 onNavigate(it)
             }
