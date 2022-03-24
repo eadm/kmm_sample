@@ -21,11 +21,9 @@ object ApplicationFeatureBuilder {
     fun build(): Feature<State, Message, Action> =
         ReduxFeature(
             State(
-                screens = listOf(
-                    State.ScreenState.UserListScreen(UsersListFeature.State.Idle()),
-                    State.ScreenState.UserDetailsScreen(UserDetailsFeature.State.Idle)
-                ),
-                currentScreenPos = 0
+                backStack = emptyList(),
+                graph = generateScreenGraph(),
+                screen = State.ScreenState.UserListScreen(UsersListFeature.State.Idle())
             ),
             ApplicationReducer(
                 UsersListReducer(),
@@ -41,4 +39,19 @@ object ApplicationFeatureBuilder {
                 transformAction = { it.safeCast<Action.UserDetailsAction>()?.action },
                 transformMessage = Message::UserDetailsMessage
             ))
+
+
+    private fun generateScreenGraph(): NavGraph {
+        val nameTriples = SCREEN_NAMES.shuffled().zipWithNext().zip(SCREEN_NAMES)
+        return nameTriples.associate { (shuffled, name3) ->
+            val (name1, name2) = shuffled
+            name1 to (name2 to name3)
+        }
+    }
+
+    private val SCREEN_NAMES =
+        listOf(
+            "UsersListFeature",
+            "UserDetailsFeature",
+        )
 }

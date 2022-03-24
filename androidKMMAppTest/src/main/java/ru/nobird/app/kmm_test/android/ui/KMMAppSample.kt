@@ -11,7 +11,7 @@ fun KMMAppSample(
     state: State,
     message: (Message) -> Unit
 ) {
-    when (val screen = state.currentScreen) {
+    when (val screen = state.screen) {
         is State.ScreenState.UserListScreen ->
             UsersListComposable(
                 state = screen.state,
@@ -19,18 +19,18 @@ fun KMMAppSample(
                     message(Message.UserListMessage(it))
                 },
                 navigate = {
-                    message(Message.OnUserDetailsScreenSwitch(screen.state.inputData.userName))
+                    message(Message.OnGoToClicked("UserDetailsScreen"))
                 }
             )
         is State.ScreenState.UserDetailsScreen ->
             UserDetailsComposable(
-                userName = state.username,
+                userName = "eadm",
                 state = screen.state,
                 message = {
                     message(Message.UserDetailsMessage(it))
                 },
                 onBackClicked = {
-                    message(Message.OnUserListScreenSwitch)
+                    message(Message.OnGoToClicked("UserListScreen"))
                 },
             )
     }
