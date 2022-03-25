@@ -50,20 +50,20 @@ import ru.nobird.app.kmm_test.user_list.UsersListFeature
 
 @ExperimentalSerializationApi
 class MainActivity : ComponentActivity() {
-    private val viewModel: NavViewModel<Screens> by viewModels {
-        NavViewModelFactory(this, Screens.serializer())
+    private val viewModel: NavigationModel<Screen> by viewModels {
+        NavViewModelFactory(this, Screen.serializer())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainContent(Screens.Main, viewModel)
+            MainContent(Screen.Main, viewModel)
         }
     }
 }
 
 @Composable
-fun Details(user: User, openUrl: (Screens.Web) -> Unit, onBack: () -> Unit) {
+fun Details(user: User, openUrl: (Screen.Web) -> Unit, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -79,7 +79,7 @@ fun Details(user: User, openUrl: (Screens.Web) -> Unit, onBack: () -> Unit) {
         },
         floatingActionButton = {
             IconButton(
-                onClick = { openUrl.invoke(Screens.Web(user.htmlUrl)) },
+                onClick = { openUrl.invoke(Screen.Web(user.htmlUrl)) },
                 Modifier.background(MaterialTheme.colors.secondary, shape = CircleShape)
             ) {
                 Icon(
@@ -109,41 +109,41 @@ fun Details(user: User, openUrl: (Screens.Web) -> Unit, onBack: () -> Unit) {
 
 @ExperimentalSerializationApi
 @Composable
-fun MainContent(startScreen: Screens, navViewModel: NavViewModel<Screens>) {
-    val onNavigate: (Screens) -> Unit = {
-        navViewModel.push(it)
+fun MainContent(startScreen: Screen, navigationModel: NavigationModel<Screen>) {
+    val onNavigate: (Screen) -> Unit = {
+        navigationModel.push(it)
     }
-    if (navViewModel.isNullOrEmpty) {
-        LaunchedEffect(navViewModel) {
+    if (navigationModel.isEmpty) {
+        LaunchedEffect(navigationModel) {
             coroutineScope {
                 onNavigate(startScreen)
             }
         }
     }
     Box(modifier = Modifier.fillMaxSize()) {
-        when (val screen = navViewModel.current) {
-            is Screens.Main -> MainScreen {
+        when (val screen = navigationModel.current) {
+            is Screen.Main -> MainScreen {
                 onNavigate(it)
             }
-            is Screens.Details -> Details(
+            is Screen.Details -> Details(
                 screen.user,
                 openUrl = { onNavigate(it) },
-                onBack = { navViewModel.pop() }
+                onBack = { navigationModel.pop() }
             )
-            is Screens.Web -> {
+            is Screen.Web -> {
                 WebViewPage(url = screen.url)
             }
             else -> {}
         }
     }
-    BackHandler(navViewModel.backEnabled()) {
-        navViewModel.pop()
+    BackHandler(navigationModel.backEnabled()) {
+        navigationModel.pop()
     }
 }
 
 
 @Composable
-private fun MainScreen(onDetails: (Screens.Details) -> Unit) {
+private fun MainScreen(onDetails: (Screen.Details) -> Unit) {
     val mainViewModel: MainViewModel = viewModel()
     val usersListFeature = mainViewModel.feature
     var queryText by mainViewModel.query
@@ -217,7 +217,7 @@ fun ErrorState() {
 @Composable
 fun DataState(
     state: UsersListFeature.State.Data,
-    onDetails: (Screens.Details) -> Unit,
+    onDetails: (Screen.Details) -> Unit,
     onLoadMore: () -> Unit
 ) {
     val listState = rememberLazyListState()
@@ -277,7 +277,7 @@ fun drawTrianglePath(size: Size): Path {
 }
 
 @Composable
-fun ListItem(user: User, onDetails: (Screens.Details) -> Unit) {
+fun ListItem(user: User, onDetails: (Screen.Details) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -297,7 +297,7 @@ fun ListItem(user: User, onDetails: (Screens.Details) -> Unit) {
                     end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
                 ), TriangleShape
             )
-            .clickable { onDetails.invoke(Screens.Details(user)) }
+            .clickable { onDetails.invoke(Screen.Details(user)) }
             .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {

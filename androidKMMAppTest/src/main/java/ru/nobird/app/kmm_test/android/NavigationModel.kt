@@ -2,8 +2,10 @@ package ru.nobird.app.kmm_test.android
 
 import android.os.Bundle
 import androidx.compose.runtime.*
+import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.savedstate.SavedStateRegistryOwner
 import com.chrynan.parcelable.core.Parcelable
 import com.chrynan.parcelable.core.decodeFromBundle
 import com.chrynan.parcelable.core.encodeToBundle
@@ -12,7 +14,7 @@ import kotlinx.serialization.KSerializer
 import java.util.ArrayList
 
 @ExperimentalSerializationApi
-class NavViewModel<T : Any>(
+class NavigationModel<T : Any>(
     savedStateHandle: SavedStateHandle,
     private val serializer: KSerializer<T>
 ) : ViewModel() {
@@ -30,7 +32,7 @@ class NavViewModel<T : Any>(
 
     private val mutableBs = backStack.toMutableStateList()
 
-    val isNullOrEmpty by derivedStateOf {
+    val isEmpty by derivedStateOf {
         mutableBs.isNullOrEmpty()
     }
 
@@ -55,3 +57,17 @@ class NavViewModel<T : Any>(
     fun backEnabled(): Boolean = mutableBs.size > 1
 
 }
+
+@ExperimentalSerializationApi
+class NavViewModelFactory<S : Any>(
+    owner: SavedStateRegistryOwner,
+    private val serializer: KSerializer<S>
+) : AbstractSavedStateViewModelFactory(owner, null) {
+    override fun <T : ViewModel?> create(
+        key: String,
+        modelClass: Class<T>,
+        handle: SavedStateHandle
+    ): T =
+        NavigationModel(handle, serializer) as T
+}
+
