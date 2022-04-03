@@ -37,7 +37,7 @@ fun <T : Any> Feature<T, *, *>.asComposeState(): State<T> {
     DisposableEffect(this) {
         addStateListener { state.value = it }
         onDispose {
-            cancel()
+//            cancel()
         }
     }
     return state
