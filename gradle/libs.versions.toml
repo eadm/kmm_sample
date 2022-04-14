@@ -25,6 +25,11 @@ ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-android = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-ios = { module = "io.ktor:ktor-client-ios", version.ref = "ktor" }
 
+dagger = { module = "com.google.dagger:dagger", version = "2.41" }
+dagger-compiler = { module = "com.google.dagger:dagger-compiler", version = "2.41" }
+dagger-android = { module = "com.google.dagger:dagger-android", version = "2.41" }
+dagger-processor = { module = "com.google.dagger:dagger-android-processor", version = "2.41" }
+
 kit-model = { module = "ru.nobird.app.core:model", version = "1.0.8" }
 kit-presentation-redux = { module = "ru.nobird.app.presentation:presentation-redux", version.ref = "kitPresentationRedux" }
 kit-presentation-reduxCoroutines = { module = "ru.nobird.app.presentation:presentation-redux-coroutines", version.ref = "kitPresentationRedux" }
@@ -39,6 +44,7 @@ android-compose-animation = { module = "androidx.compose.animation:animation", v
 android-compose-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidCompose" }
 #android-compose-themeAdapter = { module = "com.google.android.material:compose-theme-adapter", version.ref = "androidCompose" }
 android-compose-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.4.0" }
+android-compose-coil = { module = "io.coil-kt:coil-compose", version = "2.0.0-rc01" }
 
 android-test-junit = { module = "junit:junit", version = "4.13.2" }
 android-test-runner = { module = "androidx.test:runner", version = "1.4.0" }
@@ -51,5 +57,6 @@ android-compose = [
     'android-compose-activity', 'android-compose-material', 'android-compose-animation',
     'android-compose-tooling',
 #    'android-compose-themeAdapter',
-    'android-compose-viewmodel'
+    'android-compose-viewmodel',
+    'android-compose-coil'
 ]
