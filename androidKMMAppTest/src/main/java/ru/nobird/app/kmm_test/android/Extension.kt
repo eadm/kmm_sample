@@ -17,3 +17,8 @@ fun <S, M, A> Feature<S, M, A>.observeState(): State<S> {
     }
     return mutableState
 }
+
+
+fun <T: Any> NavigationModel<T>.onNavigate(screen: T) {
+    this.push(screen)
+}

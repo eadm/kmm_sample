@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     kotlin("plugin.serialization")
     kotlin("android")
+    kotlin("kapt")
 }
 
 dependencies {
@@ -15,6 +16,10 @@ dependencies {
 
     implementation(libs.bundles.ktor.common)
     implementation(libs.bundles.android.compose)
+    implementation(libs.dagger)
+    implementation(libs.dagger.android)
+    kapt(libs.dagger.compiler)
+    kapt(libs.dagger.processor)
     implementation("com.chrynan.parcelable:parcelable-core:0.4.1")
 
     testImplementation(libs.bundles.android.test)

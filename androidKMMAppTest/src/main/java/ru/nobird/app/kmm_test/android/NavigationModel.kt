@@ -12,6 +12,7 @@ import com.chrynan.parcelable.core.encodeToBundle
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import java.util.ArrayList
+import javax.inject.Inject
 
 @ExperimentalSerializationApi
 class NavigationModel<T : Any>(
@@ -58,16 +59,29 @@ class NavigationModel<T : Any>(
 
 }
 
+interface ViewModelAssistedFactory<T : ViewModel> {
+    fun create(handle: SavedStateHandle): T
+}
+
 @ExperimentalSerializationApi
-class NavViewModelFactory<S : Any>(
+class NavAssistedVMFactory @Inject constructor() :
+    ViewModelAssistedFactory<NavigationModel<Screen>> {
+    override fun create(handle: SavedStateHandle): NavigationModel<Screen> {
+        return NavigationModel(handle, Screen.serializer())
+    }
+}
+
+class Factory<out V : ViewModel>(
+    private val viewModelFactory: ViewModelAssistedFactory<V>,
     owner: SavedStateRegistryOwner,
-    private val serializer: KSerializer<S>
-) : AbstractSavedStateViewModelFactory(owner, null) {
+    defaultArgs: Bundle? = null
+) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
     override fun <T : ViewModel?> create(
         key: String,
         modelClass: Class<T>,
         handle: SavedStateHandle
-    ): T =
-        NavigationModel(handle, serializer) as T
+    ): T {
+        return viewModelFactory.create(handle) as T
+    }
 }
 

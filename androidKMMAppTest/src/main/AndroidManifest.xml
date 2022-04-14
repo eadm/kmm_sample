@@ -3,6 +3,7 @@
     package="ru.nobird.app.kmm_test.android">
 
     <application
+        android:name=".App"
         android:allowBackup="false"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">

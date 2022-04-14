@@ -25,6 +25,11 @@ ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-android = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-ios = { module = "io.ktor:ktor-client-ios", version.ref = "ktor" }
 
+dagger = { module = "com.google.dagger:dagger", version = "2.41" }
+dagger-compiler = { module = "com.google.dagger:dagger-compiler", version = "2.41" }
+dagger-android = { module = "com.google.dagger:dagger-android", version = "2.41" }
+dagger-processor = { module = "com.google.dagger:dagger-android-processor", version = "2.41" }
+
 kit-model = { module = "ru.nobird.app.core:model", version = "1.0.8" }
 kit-presentation-redux = { module = "ru.nobird.app.presentation:presentation-redux", version.ref = "kitPresentationRedux" }
 kit-presentation-reduxCoroutines = { module = "ru.nobird.app.presentation:presentation-redux-coroutines", version.ref = "kitPresentationRedux" }

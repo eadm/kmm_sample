@@ -47,18 +47,33 @@ import ru.nobird.app.core.model.Cancellable
 import ru.nobird.app.kmm_test.data.model.User
 import ru.nobird.app.kmm_test.data.model.UsersQuery
 import ru.nobird.app.kmm_test.user_list.UsersListFeature
+import javax.inject.Inject
 
 @ExperimentalSerializationApi
 class MainActivity : ComponentActivity() {
+    @Inject
+    internal lateinit var navViewModelFactory: NavAssistedVMFactory
+
+    @Inject
+    internal lateinit var screensMap: Map<Class<out Screen>, @JvmSuppressWildcards ScreenFactory<Screen>>
+
     private val viewModel: NavigationModel<Screen> by viewModels {
-        NavViewModelFactory(this, Screen.serializer())
+        Factory(navViewModelFactory, this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        injectComponent()
         setContent {
-            MainContent(Screen.Main, viewModel)
+            MainContent(Screen.Main, viewModel, screensMap)
         }
+    }
+
+    private fun injectComponent() {
+        App.component()
+            .mainComponentBuilder()
+            .build()
+            .inject(this)
     }
 }
 
@@ -107,33 +122,54 @@ fun Details(user: User, openUrl: (Screen.Web) -> Unit, onBack: () -> Unit) {
     }
 }
 
+interface ScreenFactory<T : Screen> {
+    @Composable
+    fun CreateScreen(screen: T)
+}
+
+class MainScreenFactory @Inject constructor(private val navigationModel: NavigationModel<Screen>) :
+    ScreenFactory<Screen.Main> {
+    @Composable
+    override fun CreateScreen(screen: Screen.Main) {
+        MainScreen { navigationModel.onNavigate(it) }
+    }
+}
+
+class DetailsScreenFactory @Inject constructor(private val navigationModel: NavigationModel<Screen>) :
+    ScreenFactory<Screen.Details> {
+    @Composable
+    override fun CreateScreen(screen: Screen.Details) {
+        Details(user = screen.user, openUrl = { navigationModel.onNavigate(it) }) {
+            navigationModel.pop()
+        }
+    }
+}
+
+class WebScreenFactory @Inject constructor() :
+    ScreenFactory<Screen.Web> {
+    @Composable
+    override fun CreateScreen(screen: Screen.Web) {
+        WebViewPage(url = screen.url)
+    }
+}
+
 @ExperimentalSerializationApi
 @Composable
-fun MainContent(startScreen: Screen, navigationModel: NavigationModel<Screen>) {
-    val onNavigate: (Screen) -> Unit = {
-        navigationModel.push(it)
-    }
+fun MainContent(
+    startScreen: Screen,
+    navigationModel: NavigationModel<Screen>,
+    screensMap: Map<Class<out Screen>, @JvmSuppressWildcards ScreenFactory<Screen>>
+) {
     if (navigationModel.isEmpty) {
         LaunchedEffect(navigationModel) {
             coroutineScope {
-                onNavigate(startScreen)
+                navigationModel.onNavigate(startScreen)
             }
         }
     }
     Box(modifier = Modifier.fillMaxSize()) {
-        when (val screen = navigationModel.current) {
-            is Screen.Main -> MainScreen {
-                onNavigate(it)
-            }
-            is Screen.Details -> Details(
-                screen.user,
-                openUrl = { onNavigate(it) },
-                onBack = { navigationModel.pop() }
-            )
-            is Screen.Web -> {
-                WebViewPage(url = screen.url)
-            }
-            else -> {}
+        navigationModel.current?.let {
+            screensMap[it::class.java]?.CreateScreen(screen = it)
         }
     }
     BackHandler(navigationModel.backEnabled()) {
